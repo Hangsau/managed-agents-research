@@ -7,9 +7,11 @@ import json, urllib.request, urllib.parse, datetime, os, re, sys
 from daily_topics import get_today_topic
 
 REPORTS_DIR = "/root/managed-agents/research/reports"
-SKILLS_QUEUE = "/root/managed-agents/research/skills-queue"
+SKILLS_QUEUE = "/root/managed-agents/internal/skills-queue"
+USER_REPORTS_DIR = "/root/managed-agents/reports"
 os.makedirs(REPORTS_DIR, exist_ok=True)
 os.makedirs(SKILLS_QUEUE, exist_ok=True)
+os.makedirs(USER_REPORTS_DIR, exist_ok=True)
 
 # --- Collectors ---
 
@@ -181,7 +183,92 @@ def generate_report(topic, github_results, arxiv_results, web_results):
     with open(report_path, "w") as f:
         f.write("\n".join(lines))
     
-    return report_path, high_potential
+    # --- Generate user-friendly Traditional Chinese report ---
+    user_path = generate_user_report(today, topic, scored, high_potential, arxiv_results, web_results)
+    
+    return report_path, user_path, high_potential
+
+
+def generate_user_report(today, topic, scored, high_potential, arxiv_results, web_results):
+    """Generate a concise Traditional Chinese report for human review."""
+    path = os.path.join(USER_REPORTS_DIR, f"{today}.md")
+    
+    weekday_cn = {"Monday":"週一","Tuesday":"週二","Wednesday":"週三","Thursday":"週四",
+                  "Friday":"週五","Saturday":"週六","Sunday":"週日"}
+    weekday = weekday_cn.get(datetime.date.today().strftime('%A'), "")
+    
+    lines = [
+        f"# AI Agent 每日研究速報：{topic['name']}",
+        f"**日期**：{today}（{weekday}）  ",
+        f"**主題**：{topic['name']}",
+        "",
+        "---",
+        "",
+        "## 今日重點",
+        "",
+        f"今日搜索主題為 **{topic['name']}**。共找到 {len(scored)} 個相關專案，其中 {len(high_potential)} 個評分較高。",
+        "",
+        "---",
+        "",
+        "## 🚀 值得關注的發現",
+        "",
+    ]
+    
+    for i, r in enumerate(high_potential[:5], 1):
+        desc = r.get('description', '') or ''
+        lines.append(f"### {i}. {r['name']} ({r['stars']} ⭐)")
+        lines.append(f"- **語言**：{r['language']}")
+        lines.append(f"- **簡介**：{desc}")
+        lines.append(f"- **對我們的用處**：{r['skill_reasons'][0] if r.get('skill_reasons') else '值得研究'}")
+        lines.append(f"- **連結**：{r['url']}")
+        lines.append("")
+    
+    lines.extend([
+        "---",
+        "",
+        "## 📖 arXiv 論文",
+        "",
+    ])
+    if not arxiv_results or "error" in arxiv_results[0]:
+        lines.append("今日未找到相關論文，下次會換個關鍵字再試。")
+    else:
+        for p in arxiv_results:
+            lines.append(f"- [{p['title']}]({p['url']}) ({p['date']})")
+            lines.append(f"  {p['summary'][:120]}...")
+            lines.append("")
+    
+    lines.extend([
+        "---",
+        "",
+        "## 🌐 網路相關",
+        "",
+    ])
+    if not web_results or "error" in web_results[0]:
+        lines.append("今日網路搜尋無結果。")
+    else:
+        for w in web_results:
+            lines.append(f"- [{w['title']}]({w['url']})")
+        lines.append("")
+    
+    lines.extend([
+        "---",
+        "",
+        "## ✅ 今日行動",
+        "",
+        "- [x] 完成今日主題搜索",
+        "- [x] 選出高分專案",
+        "- [ ] 深度分析 top 專案",
+        "- [ ] 審核 skill drafts",
+        "",
+        "---",
+        "",
+        "*報告由自動研究系統產生 | 有問題請直接回覆*",
+        "",
+    ])
+    
+    with open(path, "w") as f:
+        f.write("\n".join(lines))
+    return path
 
 
 def queue_skill_candidate(repo):
@@ -216,8 +303,9 @@ def main():
         print(f"{len(results)} results")
         all_web.extend(results)
     
-    report_path, candidates = generate_report(topic, all_github, arxiv, all_web)
+    report_path, user_path, candidates = generate_report(topic, all_github, arxiv, all_web)
     print(f"[📝] Report: {report_path}")
+    print(f"[📋] User report: {user_path}")
     
     for c in candidates[:3]:
         queue_path = queue_skill_candidate(c)

@@ -4,8 +4,8 @@ Deep-dive analyzer: fetches repo README + key files, evaluates skill-worthiness.
 """
 import json, urllib.request, re, os, sys
 
-SKILLS_QUEUE = "/root/managed-agents/research/skills-queue"
-SKILLS_DRAFTS = "/root/managed-agents/research/skills-drafts"
+SKILLS_QUEUE = "/root/managed-agents/internal/skills-queue"
+SKILLS_DRAFTS = "/root/managed-agents/internal/skills-drafts"
 os.makedirs(SKILLS_DRAFTS, exist_ok=True)
 
 def fetch_readme(full_name):

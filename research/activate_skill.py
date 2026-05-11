@@ -6,9 +6,9 @@ Reviews drafted skills, lets user approve/reject, then creates real skills.
 import json, os, sys, re
 from datetime import datetime
 
-DRAFTS_DIR = "/root/managed-agents/research/skills-drafts"
-APPROVED_DIR = "/root/managed-agents/research/skills-approved"
-REJECTED_DIR = "/root/managed-agents/research/skills-rejected"
+DRAFTS_DIR = "/root/managed-agents/internal/skills-drafts"
+APPROVED_DIR = "/root/managed-agents/internal/skills-approved"
+REJECTED_DIR = "/root/managed-agents/internal/skills-rejected"
 
 os.makedirs(APPROVED_DIR, exist_ok=True)
 os.makedirs(REJECTED_DIR, exist_ok=True)
