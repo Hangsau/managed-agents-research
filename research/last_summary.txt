@@ -1,8 +1,8 @@
 2026-05-12 研究報告: MCP & Tool Use
 
-GitHub: 15 repos | arXiv: 1 papers | Web: 6 links
-Skill candidates: 12
+GitHub: 15 repos | arXiv: 3 papers | Web: 6 links
+Skill candidates: 10
 
-Top pick: the-open-agent/openagent (4658 ⭐)
+Top pick: diegosouzapw/OmniRoute (4367 ⭐)
 
 全文: /root/managed-agents/research/reports/2026-05-12.md

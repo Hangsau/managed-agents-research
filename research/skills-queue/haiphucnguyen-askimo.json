@@ -1,0 +1,13 @@
+{
+  "name": "haiphucnguyen/askimo",
+  "url": "https://github.com/haiphucnguyen/askimo",
+  "description": "Local-first AI agent platform for desktop and CLI. Chat, RAG search, multi-step Plans workflows, MCP tools, and Agents integration. Supports OpenAI, Claude, Gemini, Grok, Ollama, LM Studio and more",
+  "stars": 104,
+  "updated": "2026-05-12",
+  "language": "Kotlin",
+  "skill_score": 4,
+  "skill_reasons": [
+    "popular (104 stars)",
+    "relevant keywords"
+  ]
+}
