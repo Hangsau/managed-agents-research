@@ -1,98 +1,77 @@
-# Managed Agents Swarm
+# Managed Agents
 
-Self-hosted multi-turn agent framework with Docker sandbox.
+> A personal batch task runner for free-tier LLMs. Not an agent framework.
+
+This is a lightweight tool for running structured LLM tasks in batches using free API keys. It lives in the gap between "one-off curl" and "full agent framework".
+
+## What it is
+
+- **Batch runner**: Submit N tasks, run them sequentially from a SQLite queue
+- **Playbook-driven**: Tasks follow JSON-defined step sequences so cheap models don't need to plan
+- **Results as data**: Output is structured JSON, not chatty prose
+- **Free-tier only**: Built around OpenRouter free models, no paid keys
+
+## What it is NOT
+
+- NOT a conversational agent (no memory, no multi-turn chat)
+- NOT a framework for building AI applications (firn does that)
+- NOT autonomous (it runs what you tell it to run, nothing more)
+
+## When to use it
+
+| Use this | Don't use this |
+|---|---|
+| "Research 10 repos and output a comparison table" | "Chat with me about research findings" |
+| "Run the same playbook 50 times with different inputs" | "Plan a complex multi-step project dynamically" |
+| "Collect arXiv abstracts on a topic" | "Write a novel with narrative arc" |
 
 ## Architecture
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│  Dispatcher │────▶│   Harness    │────▶│   Docker    │
-│  (dispatch) │     │  (harness)   │     │  (sandbox)  │
-└─────────────┘     └──────────────┘     └─────────────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │ SQLite Event │
-                    │    Log       │
-                    └──────────────┘
+│   Submit    │────▶│ SQLite Queue │────▶│  Dispatcher │
+│   Batch     │     │  (task_queue)│     │  (sequential)│
+└─────────────┘     └──────────────┘     └──────┬──────┘
+                                                 │
+                    ┌────────────────────────────┘
+                    ▼
+           ┌─────────────────┐
+           │  Playbook Runner│───▶ LLM function calls
+           │  (per step)     │───▶ Results → JSON
+           └─────────────────┘
 ```
-
-- **Dispatcher** (`dispatch.py`): Launch background agent runs, return immediately
-- **Harness** (`harness.py`): Single-brain planner. Plan → execute → persist → sleep
-- **Docker Sandbox** (`docker_exec.py`): Isolated bash execution
-- **Event Log** (`sessions.db`): Append-only SQLite, wake/resume by `session_id`
 
 ## Quick Start
 
 ```bash
-# Start a new agent task (background)
-./ma run "Research OpenAI's latest blog post and summarize"
-# → Returns session_id immediately
+# 1. Submit a batch of 5 research tasks
+python3 -m core.v2.harness_v2 batch research '{"topic":"MCP","angle":"server"}' 5
+# → batch_abc12345
 
-# Check all running sessions
-./ma status
+# 2. Run the queue
+python3 -m core.v2.harness_v2 dispatch
 
-# Resume a waiting session (if it asked a question)
-./ma resume <session_id> "answer: yes, proceed"
+# 3. Check progress
+python3 -m core.v2.harness_v2 status batch_abc12345
 
-# View logs
-./ma logs <session_id>
-
-# List all sessions
-./ma ls
+# 4. Collect results
+python3 -m core.v2.harness_v2 results batch_abc12345
 ```
 
-## How It Works
+## Repo layout
 
-1. You call `ma run "goal"`
-2. Dispatcher creates `session_id`, forks background process
-3. Harness loads history from SQLite (empty for new session)
-4. Planner (LLM) decides ONE next action: `bash`, `read_file`, `write_file`, `complete`, `ask_user`
-5. Action executes inside Docker sandbox
-6. Result persisted to event log
-7. Repeat until `complete` or `max_turns` reached
-
-## Event Log Schema
-
-```sql
-CREATE TABLE events (
-    seq INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id TEXT NOT NULL,
-    ts DATETIME DEFAULT CURRENT_TIMESTAMP,
-    type TEXT NOT NULL,  -- 'user_goal', 'planner_decision', 'tool_call', 'tool_result', 'completion', 'error'
-    payload TEXT NOT NULL  -- JSON
-);
-```
-
-## When to Use Swarm vs delegate_task
-
-| Use Swarm | Use delegate_task |
+| Path | What |
 |---|---|
-| Long-running research (needs state across turns) | One-off parallel tasks (review 10 files) |
-| Needs to ask user mid-flight | Deterministic, no follow-up needed |
-| Must survive disconnection | Quick < 2 min tasks |
-| Multi-step with error recovery | Independent subtasks |
+| `core/v2/` | Current batch runner (playbook + queue + dispatcher) |
+| `core/v1/` | Deprecated old code (single-session harness) |
+| `playbooks/` | JSON workflow definitions |
+| `research/` | Deep-dive reports (not daily noise) |
 
-## Files
+## Relationship to other projects
 
-| File | Purpose |
-|---|---|
-| `core/harness.py` | Main planner loop |
-| `core/dispatch.py` | Background launcher |
-| `core/run_agent.py` | Auto-run turns until done |
-| `core/docker_exec.py` | Docker sandbox wrapper |
-| `core/guards/` | Bash and path guards |
-| `sessions.db` | SQLite event log |
-| `logs/` | Per-session stdout logs |
-| `pending_results/` | Completed session results waiting for relay |
+- **firn** (Hang's project): The actual AI agent framework. Managed-agents is a satellite tool it may call for batch work.
+- **Hermes Agent**: The system I run in. Managed-agents is my personal utility, not part of Hermes core.
 
-## Current Status
+## License
 
-- Phase 1: Single-brain, OpenRouter free tier (`deepseek-v4-flash`)
-- Phase 2 (planned): Multi-agent orchestrator, work distribution
-- Phase 3 (planned): Persistent memory, skill library
-- Phase 4 (blocked): KVM sandbox (this VM has no KVM)
-
-## Daily Research Pipeline
-
-The `research/` directory contains the daily AI research pipeline. It should be migrated to use this swarm framework instead of standalone cronjob scripts.
+MIT

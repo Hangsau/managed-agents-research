@@ -7,7 +7,7 @@ import json, urllib.request, urllib.parse, datetime, os, re, sys
 from daily_topics import get_today_topic
 
 REPORTS_DIR = "/root/managed-agents/research/reports"
-SKILLS_QUEUE = "/root/managed-agents/internal/skills-queue"
+SKILLS_QUEUE = "/root/managed-agents/research/skills-queue"
 USER_REPORTS_DIR = "/root/managed-agents/reports"
 os.makedirs(REPORTS_DIR, exist_ok=True)
 os.makedirs(SKILLS_QUEUE, exist_ok=True)
@@ -323,11 +323,48 @@ Top pick: {candidates[0]['name'] if candidates else 'None'} ({candidates[0]['sta
     
     print("=" * 50)
     print(summary)
+    
+    # Write summary for external pickup
+    summary_path = "/root/managed-agents/research/last_summary.txt"
+    with open(summary_path, "w") as f:
+        f.write(summary)
+    
+    # --- Auto-commit & push to GitHub ---
+    git_commit_push()
+    
+    # --- Deep-dive analysis on queued candidates ---
+    print("\n[🔬] Running deep-dive analysis...")
+    try:
+        import deep_dive
+        deep_dive.main()
+    except Exception as e:
+        print(f"[deep_dive] Error: {e}")
+    
+    # Re-commit if deep_dive created drafts
+    git_commit_push()
+    
     return summary
 
 
+def git_commit_push():
+    """Commit generated reports and push to origin."""
+    import subprocess
+    repo = "/root/managed-agents"
+    try:
+        subprocess.run(["git", "-C", repo, "add", "reports/", "research/reports/", "research/skills-queue/", "research/last_summary.txt"], check=True)
+        result = subprocess.run(["git", "-C", repo, "diff", "--cached", "--quiet"])
+        if result.returncode == 0:
+            print("[git] Nothing to commit")
+            return
+        today = datetime.date.today().isoformat()
+        subprocess.run(["git", "-C", repo, "commit", "-m", f"research: daily report {today}"], check=True)
+        subprocess.run(["git", "-C", repo, "push", "origin", "HEAD"], check=True)
+        print("[git] Pushed to GitHub")
+    except subprocess.CalledProcessError as e:
+        print(f"[git] Error: {e}")
+    except Exception as e:
+        print(f"[git] Unexpected error: {e}")
+
+
 if __name__ == "__main__":
-    summary = main()
-    # Write summary for external pickup
-    with open("/root/managed-agents/research/last_summary.txt", "w") as f:
-        f.write(summary)
+    main()

@@ -10,7 +10,7 @@ def dispatch(goal: str, max_turns: int = 20):
     os.makedirs(LOG_DIR, exist_ok=True)
 
     cmd = [
-        "python3", "run_agent.py", sid, goal, f"--max-turns={max_turns}"
+        "python3", "core/run_agent.py", sid, goal, f"--max-turns={max_turns}"
     ]
 
     with open(log_path, "w") as logf:

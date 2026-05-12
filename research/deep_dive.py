@@ -4,8 +4,8 @@ Deep-dive analyzer: fetches repo README + key files, evaluates skill-worthiness.
 """
 import json, urllib.request, re, os, sys
 
-SKILLS_QUEUE = "/root/managed-agents/internal/skills-queue"
-SKILLS_DRAFTS = "/root/managed-agents/internal/skills-drafts"
+SKILLS_QUEUE = "/root/managed-agents/research/skills-queue"
+SKILLS_DRAFTS = "/root/managed-agents/research/skills-drafts"
 os.makedirs(SKILLS_DRAFTS, exist_ok=True)
 
 def fetch_readme(full_name):
@@ -14,14 +14,14 @@ def fetch_readme(full_name):
     req = urllib.request.Request(url, headers={"User-Agent": "DeepDive/1.0"})
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
-            return resp.read().decode()[:5000]
+            return resp.read().decode()[:40000]
     except:
         # Try master branch
         url = f"https://raw.githubusercontent.com/{full_name}/master/README.md"
         req = urllib.request.Request(url, headers={"User-Agent": "DeepDive/1.0"})
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
-                return resp.read().decode()[:5000]
+                return resp.read().decode()[:40000]
         except Exception as e:
             return f"[ERROR fetching README: {e}]"
 
@@ -70,20 +70,60 @@ def evaluate_skill_potential(repo, readme):
         "description": repo.get("description", "")[:200],
     }
 
-def generate_skill_draft(evaluation):
+def generate_skill_draft(evaluation, readme=""):
     """Generate a skill draft if score is high enough."""
     if evaluation["final_score"] < 5:
         return None
     
     name = evaluation["name"].split("/")[-1].lower().replace("_", "-").replace(" ", "-")
-    # sanitize further
     name = re.sub(r'[^a-z0-9-]', '', name)
+    
+    # Extract install command from README (search in all text including code blocks)
+    install_cmd = ""
+    for line in readme.splitlines():
+        line_stripped = line.strip().strip('`').strip()
+        if any(line_stripped.startswith(cmd) for cmd in ["npm install", "pip install", "cargo install", "brew install", "go install", "yarn add", "pnpm add", "npx ", "curl ", "wget ", "git clone", "docker run"]):
+            install_cmd = line_stripped
+            break
+    
+    # Extract first code example (prefer non-install, but fallback to any)
+    usage_example = ""
+    code_blocks = re.findall(r"```(?:\w+)?\n(.*?)```", readme, re.DOTALL)
+    for block in code_blocks:
+        block_stripped = block.strip()
+        if not block_stripped:
+            continue
+        # Skip install commands for usage example
+        if any(block_stripped.startswith(cmd) for cmd in ["npm install", "pip install", "cargo install", "brew install", "go install", "yarn add", "pnpm add", "npx ", "curl ", "wget ", "git clone", "docker run"]):
+            continue
+        usage_example = block_stripped[:800]
+        break
+    
+    # If no non-install code block found, take first code block
+    if not usage_example and code_blocks:
+        usage_example = code_blocks[0].strip()[:800]
+    
+    # Extract description from README first meaningful paragraph (skip HTML, badges, images)
+    readme_desc = ""
+    for line in readme.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # Skip HTML tags, markdown images, badges, headings
+        if line.startswith("<") or line.startswith("!") or line.startswith("[") or line.startswith("#") or line.startswith("|") or line.startswith("-") or line.startswith("*"):
+            continue
+        # Skip lines that are just badges or shields
+        if "shields.io" in line or "badge" in line.lower() or "img.shields" in line:
+            continue
+        readme_desc = line[:200]
+        break
+    
+    desc = readme_desc or evaluation.get("description", "")
     
     draft = f"""---
 name: {name}
 description: |
-  Auto-discovered skill from {evaluation['name']}.
-  {evaluation['description']}
+  {desc}
 trigger: |
   User mentions {name} or related functionality.
   Keywords: {name}, {evaluation['name'].split('/')[0]}
@@ -98,18 +138,18 @@ Discovery score: {evaluation['final_score']}/7
 ## Quick Start
 
 ```bash
-# TODO: Add install command after reviewing repo
+{install_cmd or '# TODO: Add install command after reviewing repo'}
 ```
 
 ## Usage
 
 ```bash
-# TODO: Add usage examples after testing
+{usage_example or '# TODO: Add usage examples after testing'}
 ```
 
 ## Notes
 
-- Auto-discovered by daily research agent
+- Auto-discovered by daily research agent (deep-dive analysis)
 - Needs manual review before activation
 - Original repo: {evaluation['url']}
 """
@@ -143,7 +183,7 @@ def main():
         eval_result = evaluate_skill_potential(repo, readme)
         print(f"    Score: {eval_result['final_score']}/7 ({', '.join(eval_result['reasons'])})")
         
-        draft = generate_skill_draft(eval_result)
+        draft = generate_skill_draft(eval_result, readme)
         if draft:
             print(f"    ✅ Skill draft created: {draft}")
             created.append({

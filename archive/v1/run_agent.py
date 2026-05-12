@@ -12,7 +12,7 @@ if goal:
 
 for turn in range(1, MAX_TURNS + 1):
     print(f"\n--- Turn {turn} ---")
-    cmd = ["python3", "harness.py", session_id]
+    cmd = ["python3", "core/harness.py", session_id]
     if turn == 1 and goal:
         cmd.append(goal)
     
@@ -41,6 +41,12 @@ for turn in range(1, MAX_TURNS + 1):
         print(f"\n[WAIT] {turn_result.get('question')}")
         break
     elif turn_result.get("status") == "error":
+        err_msg = str(turn_result.get("message", ""))
+        # ask_user errors should not kill the agent; let it retry
+        if "ask_user" in err_msg.lower():
+            print(f"\n[SKIP] ask_user blocked: {err_msg}")
+            time.sleep(1)
+            continue
         print(f"\n[ERR] {turn_result}")
         break
     else:

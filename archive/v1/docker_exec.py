@@ -9,10 +9,11 @@ def docker_exec(cmd: str, workdir: str = "/tmp"):
     docker_cmd = [
         "docker", "run", "--rm",
         "-v", f"{workdir}:/workspace",
+        "-v", "/tmp:/tmp",
         "-w", "/workspace",
         "-e", "HOME=/workspace",
         "-e", "PATH=/usr/local/bin:/usr/bin:/bin",
-        "--network", "bridge",
+        "--network", "none",
         "--cap-drop", "ALL",
         "agent-sandbox:latest",
         "sh", "-c", cmd
