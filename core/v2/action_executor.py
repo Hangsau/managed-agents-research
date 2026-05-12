@@ -1,4 +1,5 @@
 """Action dispatcher: routes action names to their v2 handlers."""
+import concurrent.futures
 import json
 import sys, os
 
@@ -127,11 +128,18 @@ TOOL_SCHEMAS = [
 ]
 
 
-def run(action: str, args: dict, session_id: str) -> dict:
+def run(action: str, args: dict, session_id: str, timeout: float = 60.0) -> dict:
     mod = _ACTIONS.get(action)
     if mod is None:
         return {"error": "unknown action"}
-    return mod.run(args, session_id)
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(mod.run, args, session_id)
+            return future.result(timeout=timeout)
+    except concurrent.futures.TimeoutError:
+        return {"error": f"Action {action} timed out after {timeout}s"}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 def dispatch(tool_call: dict, session_id: str) -> dict:

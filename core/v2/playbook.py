@@ -37,6 +37,9 @@ class Step:
     args: dict[str, Any] = field(default_factory=dict)
     name: str = ""
     condition: str | None = None
+    timeout: int = 60  # seconds
+    label: str = ""      # jump target identifier
+    goto: str | None = None  # jump to label after execution
 
 
 @dataclass
@@ -46,6 +49,7 @@ class Playbook:
     description: str = ""
     vars: dict[str, Any] = field(default_factory=dict)
     steps: list[Step] = field(default_factory=list)
+    output_schema: dict[str, Any] | None = None  # JSON schema for result validation
 
     def with_vars(self, overrides: dict[str, Any]) -> Playbook:
         """Return a new Playbook with vars merged."""
@@ -93,6 +97,47 @@ def _evaluate_condition(condition: str | None, ctx: dict[str, Any]) -> bool:
     return bool(interpolated)
 
 
+def _validate_schema(data: Any, schema: dict, path: str = "") -> list[str]:
+    """Minimal JSON schema validator (type, required, properties, items, enum)."""
+    errors: list[str] = []
+    expected_type = schema.get("type")
+
+    if expected_type == "object":
+        if not isinstance(data, dict):
+            errors.append(f"{path}: expected object, got {type(data).__name__}")
+        else:
+            for key in schema.get("required", []):
+                if key not in data:
+                    errors.append(f"{path}: missing required field '{key}'")
+            for key, prop_schema in schema.get("properties", {}).items():
+                if key in data:
+                    errors.extend(_validate_schema(data[key], prop_schema, f"{path}.{key}"))
+    elif expected_type == "array":
+        if not isinstance(data, list):
+            errors.append(f"{path}: expected array, got {type(data).__name__}")
+        else:
+            item_schema = schema.get("items", {})
+            for i, item in enumerate(data):
+                errors.extend(_validate_schema(item, item_schema, f"{path}[{i}]"))
+    elif expected_type == "string":
+        if not isinstance(data, str):
+            errors.append(f"{path}: expected string, got {type(data).__name__}")
+    elif expected_type == "integer":
+        if not isinstance(data, int) or isinstance(data, bool):
+            errors.append(f"{path}: expected integer, got {type(data).__name__}")
+    elif expected_type == "number":
+        if not isinstance(data, (int, float)) or isinstance(data, bool):
+            errors.append(f"{path}: expected number, got {type(data).__name__}")
+    elif expected_type == "boolean":
+        if not isinstance(data, bool):
+            errors.append(f"{path}: expected boolean, got {type(data).__name__}")
+
+    if "enum" in schema and data not in schema["enum"]:
+        errors.append(f"{path}: expected one of {schema['enum']}, got {data!r}")
+
+    return errors
+
+
 def load_playbook(path_or_name: str) -> Playbook | None:
     """Parse a *.playbook JSON file and return a Playbook dataclass.
 
@@ -116,18 +161,22 @@ def load_playbook(path_or_name: str) -> Playbook | None:
     raw_steps = data.get("steps", [])
     steps: list[Step] = []
     for rs in raw_steps:
-        # Steps in playbook JSON are flat dicts with action + args inline
-        # Make a copy to avoid mutating the original
         rs = dict(rs)
         action = rs.pop("action", "")
         name = rs.pop("name", "")
         condition = rs.pop("condition", None) if "condition" in rs else None
+        timeout = rs.pop("timeout", 60)
+        label = rs.pop("label", "")
+        goto = rs.pop("goto", None)
         steps.append(
             Step(
                 name=name,
                 action=action,
-                args=rs,  # remaining keys are args
+                args=rs,
                 condition=condition,
+                timeout=timeout,
+                label=label,
+                goto=goto,
             )
         )
 
@@ -136,6 +185,7 @@ def load_playbook(path_or_name: str) -> Playbook | None:
         description=data.get("description", ""),
         vars=data.get("vars", {}),
         steps=steps,
+        output_schema=data.get("output_schema"),
     )
 
 
@@ -164,7 +214,15 @@ def run_playbook(
     ctx = {**playbook.vars, **(llm_context or {})}
     results: list[dict] = []
 
-    for idx, step in enumerate(playbook.steps):
+    # Build label → index map for goto resolution
+    label_index = {step.label: i for i, step in enumerate(playbook.steps) if step.label}
+    max_steps = len(playbook.steps) * 10  # safety limit to prevent infinite loops
+    steps_executed = 0
+    idx = 0
+
+    while 0 <= idx < len(playbook.steps) and steps_executed < max_steps:
+        steps_executed += 1
+        step = playbook.steps[idx]
         step_name = step.name or f"step_{idx}"
 
         if not _evaluate_condition(step.condition, ctx):
@@ -177,15 +235,15 @@ def run_playbook(
                     "error": False,
                 }
             )
+            idx += 1
             continue
 
         resolved_args = resolve_args(step.args, ctx)
         print(f"[{session_id}] Playbook step '{step_name}': {step.action} | Args: {list(resolved_args.keys())}")
 
-        result = action_executor.run(step.action, resolved_args, session_id)
+        result = action_executor.run(step.action, resolved_args, session_id, timeout=step.timeout)
 
         # Merge result values back into context so later steps can reference them
-        # (e.g. a step named 'find_files' produces {{find_files.stdout}})
         if isinstance(result, dict):
             ctx[f"{step_name}_result"] = result
             for k, v in result.items():
@@ -218,5 +276,22 @@ def run_playbook(
         if has_error and stop_on_error:
             print(f"[{session_id}] Playbook stopped due to error in step '{step_name}'")
             break
+
+        # Dynamic jump: goto takes precedence over sequential flow
+        if step.goto and step.goto in label_index:
+            idx = label_index[step.goto]
+            print(f"[{session_id}] Playbook goto '{step.goto}' (step {idx})")
+        else:
+            idx += 1
+
+    # Validate against output schema if defined
+    if playbook.output_schema:
+        errors = _validate_schema(results, playbook.output_schema)
+        if errors:
+            print(f"[{session_id}] Playbook output validation failed:")
+            for e in errors:
+                print(f"  - {e}")
+        else:
+            print(f"[{session_id}] Playbook output validation passed")
 
     return results

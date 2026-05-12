@@ -108,8 +108,89 @@ def test_collect_results():
     assert results[0]["session_id"] == "col_s1"
     assert results[0]["result"]["answer"] == 42
 
+    # Test merge mode
+    merged = collect_results(batch_id, merge=True)
+    assert isinstance(merged, dict)
+    assert merged["total"] == 1
+    assert merged["success"] == 1
+    assert merged["failed"] == 0
+    assert "col_s1" in merged["results"]
+
     os.unlink(temp_path)
     print("test_collect_results OK")
+
+
+def test_retry():
+    batch_id = submit_batch([
+        {"session_id": "retry_s1", "playbook_name": "research", "vars": {}},
+    ], max_retries=2)
+
+    task = db.claim_next_pending()
+    assert task["max_retries"] == 2
+    assert task["retries"] == 0
+
+    # First failure -> should retry (retries=0 < max_retries=2)
+    retried = db.complete_task(task["id"], error="network error")
+    assert retried is True
+
+    # Claim again (retry attempt 1)
+    task2 = db.claim_next_pending()
+    assert task2["retries"] == 1
+    retried2 = db.complete_task(task2["id"], error="still broken")
+    assert retried2 is True
+
+    # Claim again (retry attempt 2)
+    task3 = db.claim_next_pending()
+    assert task3["retries"] == 2
+    retried3 = db.complete_task(task3["id"], error="final fail")
+    assert retried3 is False  # no more retries
+
+    status = db.get_batch_status(batch_id)
+    assert status["failed"] == 1
+    print("test_retry OK")
+
+
+def test_schema_validation():
+    from core.v2.playbook import _validate_schema
+
+    schema = {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+            "name": {"type": "string"},
+            "count": {"type": "integer"},
+        }
+    }
+
+    errors = _validate_schema({"name": "test", "count": 5}, schema)
+    assert errors == []
+
+    errors = _validate_schema({"count": 5}, schema)
+    assert any("missing required field 'name'" in e for e in errors)
+
+    errors = _validate_schema({"name": "test", "count": "five"}, schema)
+    assert any("expected integer" in e for e in errors)
+
+    print("test_schema_validation OK")
+
+
+def test_playbook_goto():
+    from core.v2.playbook import Playbook, Step, run_playbook
+
+    pb = Playbook(
+        name="goto_test",
+        steps=[
+            Step(action="bash", name="check", args={"cmd": "echo ok"}),
+            Step(action="complete", name="branch", args={}, goto="end"),
+            Step(action="bash", name="skipped", args={"cmd": "echo should_not_run"}),
+            Step(action="complete", name="end", args={}, label="end"),
+        ]
+    )
+
+    results = run_playbook(pb, session_id="goto_test_session", stop_on_error=False)
+    step_names = [r["step_name"] for r in results if not r["skipped"]]
+    assert step_names == ["check", "branch", "end"]
+    print("test_playbook_goto OK")
 
 
 if __name__ == "__main__":
@@ -118,4 +199,7 @@ if __name__ == "__main__":
     test_load_playbook_builtin()
     test_playbook_with_vars()
     test_collect_results()
+    test_retry()
+    test_schema_validation()
+    test_playbook_goto()
     print("\nAll integration tests passed.")

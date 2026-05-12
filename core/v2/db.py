@@ -1,10 +1,16 @@
 """SQLite event log."""
-import json, sqlite3
+import json, sqlite3, threading
 from .config import DB_PATH
 
+_local = threading.local()
+
 def _conn():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA journal_mode=WAL")
+    conn = getattr(_local, "conn", None)
+    if conn is None:
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout = 2000")
+        _local.conn = conn
     return conn
 
 def ensure_schema():
@@ -76,6 +82,8 @@ def ensure_queue_schema():
                 status TEXT DEFAULT 'pending',
                 result_path TEXT,
                 error TEXT,
+                retries INTEGER DEFAULT 0,
+                max_retries INTEGER DEFAULT 0,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 started_at TEXT,
                 completed_at TEXT
@@ -84,22 +92,61 @@ def ensure_queue_schema():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_batch ON task_queue(batch_id, status)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_status ON task_queue(status)")
         conn.commit()
+    _migrate_queue_schema()
 
-def enqueue(batch_id: str, session_id: str, playbook_name: str, vars: dict) -> int:
+def _migrate_queue_schema():
+    """Add missing columns to existing task_queue table."""
+    with _conn() as conn:
+        cursor = conn.execute("PRAGMA table_info(task_queue)")
+        columns = [row[1] for row in cursor.fetchall()]
+        if "retries" not in columns:
+            conn.execute("ALTER TABLE task_queue ADD COLUMN retries INTEGER DEFAULT 0")
+        if "max_retries" not in columns:
+            conn.execute("ALTER TABLE task_queue ADD COLUMN max_retries INTEGER DEFAULT 0")
+        conn.commit()
+
+def enqueue(batch_id: str, session_id: str, playbook_name: str, vars: dict, max_retries: int = 0) -> int:
     with _conn() as conn:
         cur = conn.execute(
-            "INSERT INTO task_queue (batch_id, session_id, playbook_name, vars) VALUES (?, ?, ?, ?)",
-            (batch_id, session_id, playbook_name, json.dumps(vars, ensure_ascii=False))
+            "INSERT INTO task_queue (batch_id, session_id, playbook_name, vars, max_retries) VALUES (?, ?, ?, ?, ?)",
+            (batch_id, session_id, playbook_name, json.dumps(vars, ensure_ascii=False), max_retries)
         )
         conn.commit()
         return cur.lastrowid
+
+def complete_task(task_id: int, result_path: str | None = None, error: str | None = None) -> bool:
+    """Complete a task. Returns True if task was retried."""
+    with _conn() as conn:
+        if error:
+            row = conn.execute(
+                "SELECT retries, max_retries FROM task_queue WHERE id=?",
+                (task_id,)
+            ).fetchone()
+            if row and row[0] < row[1]:
+                conn.execute(
+                    "UPDATE task_queue SET status='pending', retries=?, error=NULL, started_at=NULL WHERE id=?",
+                    (row[0] + 1, task_id)
+                )
+                conn.commit()
+                return True
+            conn.execute(
+                "UPDATE task_queue SET status='failed', error=?, completed_at=datetime('now') WHERE id=?",
+                (error, task_id)
+            )
+        else:
+            conn.execute(
+                "UPDATE task_queue SET status='done', result_path=?, completed_at=datetime('now') WHERE id=?",
+                (result_path, task_id)
+            )
+        conn.commit()
+        return False
 
 def claim_next_pending() -> dict | None:
     """Atomically claim one pending task. Returns task dict or None."""
     with _conn() as conn:
         conn.execute("BEGIN IMMEDIATE")
         row = conn.execute(
-            "SELECT id, batch_id, session_id, playbook_name, vars FROM task_queue WHERE status='pending' ORDER BY id LIMIT 1"
+            "SELECT id, batch_id, session_id, playbook_name, vars, retries, max_retries FROM task_queue WHERE status='pending' ORDER BY id LIMIT 1"
         ).fetchone()
         if not row:
             conn.commit()
@@ -115,22 +162,10 @@ def claim_next_pending() -> dict | None:
             "batch_id": row[1],
             "session_id": row[2],
             "playbook_name": row[3],
-            "vars": json.loads(row[4]) if row[4] else {}
+            "vars": json.loads(row[4]) if row[4] else {},
+            "retries": row[5],
+            "max_retries": row[6],
         }
-
-def complete_task(task_id: int, result_path: str | None = None, error: str | None = None):
-    with _conn() as conn:
-        if error:
-            conn.execute(
-                "UPDATE task_queue SET status='failed', error=?, completed_at=datetime('now') WHERE id=?",
-                (error, task_id)
-            )
-        else:
-            conn.execute(
-                "UPDATE task_queue SET status='done', result_path=?, completed_at=datetime('now') WHERE id=?",
-                (result_path, task_id)
-            )
-        conn.commit()
 
 def get_batch_status(batch_id: str) -> dict:
     """Return {total, pending, running, done, failed, tasks: [...]}."""
