@@ -1,7 +1,7 @@
 2026-05-12 研究報告: MCP & Tool Use
 
 GitHub: 15 repos | arXiv: 3 papers | Web: 6 links
-Skill candidates: 11
+Skill candidates: 12
 
 Top pick: GlitterKill/sdl-mcp (300 ⭐)
 
