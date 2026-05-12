@@ -1,0 +1,30 @@
+{
+  "name": "Example Debug Playbook",
+  "vars": {
+    "target_dir": "/root/managed-agents/core/v2"
+  },
+  "steps": [
+    {
+      "name": "list_files",
+      "action": "bash",
+      "args": {
+        "cmd": "ls -la {{target_dir}}"
+      }
+    },
+    {
+      "name": "read_readme",
+      "action": "read_file",
+      "args": {
+        "path": "/root/managed-agents/README.md"
+      },
+      "condition": "{{target_dir}}"
+    },
+    {
+      "name": "finish",
+      "action": "complete",
+      "args": {
+        "summary": "Playbook finished for {{target_dir}}"
+      }
+    }
+  ]
+}
