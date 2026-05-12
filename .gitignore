@@ -21,3 +21,9 @@ pending_results/
 
 # System
 .DS_Store
+
+# Runtime artifacts
+logs/
+pending_results/
+sessions/
+sessions.db
