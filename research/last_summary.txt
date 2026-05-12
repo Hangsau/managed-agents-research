@@ -1,8 +1,8 @@
 2026-05-12 研究報告: MCP & Tool Use
 
 GitHub: 15 repos | arXiv: 3 papers | Web: 6 links
-Skill candidates: 12
+Skill candidates: 13
 
-Top pick: lobehub/lobehub (76867 ⭐)
+Top pick: mastra-ai/mastra (23787 ⭐)
 
 全文: /root/managed-agents/research/reports/2026-05-12.md
