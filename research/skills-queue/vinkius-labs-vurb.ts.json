@@ -1,0 +1,14 @@
+{
+  "name": "vinkius-labs/vurb.ts",
+  "url": "https://github.com/vinkius-labs/vurb.ts",
+  "description": "TypeScript framework for building production MCP servers. Fluent tool API, FSM gating, presenters, semantic routing, cache hints, Zod validation. Model-View-Agent architecture for the Model Context Protocol.",
+  "stars": 251,
+  "updated": "2026-05-11",
+  "language": "TypeScript",
+  "skill_score": 5,
+  "skill_reasons": [
+    "popular (251 stars)",
+    "practical language (TypeScript)",
+    "relevant keywords"
+  ]
+}
