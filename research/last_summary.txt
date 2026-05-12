@@ -1,8 +1,8 @@
 2026-05-12 研究報告: MCP & Tool Use
 
 GitHub: 15 repos | arXiv: 3 papers | Web: 6 links
-Skill candidates: 10
+Skill candidates: 11
 
-Top pick: diegosouzapw/OmniRoute (4367 ⭐)
+Top pick: GlitterKill/sdl-mcp (300 ⭐)
 
 全文: /root/managed-agents/research/reports/2026-05-12.md
