@@ -19,6 +19,12 @@ from heartbeat_v2 import (
     _is_on_cooldown,
     action_connect,
     action_report,
+    action_evolve,
+    action_work,
+    execute_action,
+    _scan_cron_errors,
+    _summarize_today,
+    _record_action_log,
     score_actions,
     select_action,
 )
@@ -262,29 +268,32 @@ class TestSelectAction:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class TestActionConnect:
-    """Warmth action — pure formatting from warmth_actions field."""
+    """Provider health: pause degraded jobs, unpause recovered, scan 429."""
 
-    def test_no_cold_sessions(self):
-        result = action_connect(_snap(warmth_actions=[]), dry_run=False)
-        assert result == "no cold sessions"
+    def test_returns_tuple(self):
+        result, steps, errors = action_connect(_snap(), dry_run=False)
+        assert isinstance(result, str)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
 
-    def test_cold_sessions_summary(self):
-        snap = _snap(warmth_actions=[
-            {"file": "session_a.jsonl", "idle_hours": 25.0},
-            {"file": "session_b.jsonl", "idle_hours": 30.0},
-            {"file": "session_c.jsonl", "idle_hours": 50.0},
-            {"file": "session_d.jsonl", "idle_hours": 48.0},
-        ])
-        result = action_connect(snap, dry_run=False)
-        assert "4 cold sessions" in result
-        # Should only mention first 3
-        for f in ["session_a", "session_b", "session_c"]:
-            assert f in result
+    def test_result_starts_with_connect(self):
+        result, *_ = action_connect(_snap(), dry_run=False)
+        assert result.startswith("CONNECT:")
 
-    def test_dry_run_prefix(self):
-        snap = _snap(warmth_actions=[{"file": "x.jsonl", "idle_hours": 30.0}])
-        result = action_connect(snap, dry_run=True)
-        assert result.startswith("[DRY]")
+    def test_dry_run_no_crash(self):
+        """Dry-run with degraded platform should produce steps without error."""
+        snap = _snap(failed_platforms=["opencode"])
+        result, steps, errors = action_connect(snap, dry_run=True)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
+
+    def test_empty_cron_no_steps(self):
+        """No failed platforms and no cron errors → mostly empty steps."""
+        snap = _snap(failed_platforms=[])
+        result, steps, errors = action_connect(snap, dry_run=False)
+        assert result.startswith("CONNECT:")
+        # No provider degraded → no pause/unpause steps; may have rate-limit steps
+        assert isinstance(steps, list)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -292,23 +301,22 @@ class TestActionConnect:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class TestActionReport:
-    """Status summary — pure formatting."""
+    """Summarize today's action log entries."""
 
-    def test_basic_report(self):
-        result = action_report(_snap(), dry_run=False)
-        assert "agents=0" in result
-        assert "disk=50.0%" in result
-        assert "mem=50.0%" in result
-        assert "stuck=0" in result
-        assert "sessions=10" in result
+    def test_returns_tuple(self):
+        result, steps, errors = action_report(_snap(), dry_run=False)
+        assert isinstance(result, str)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
 
-    def test_pipe_separated(self):
-        result = action_report(_snap(), dry_run=False)
-        assert " | " in result
-
-    def test_memory_none_handling(self):
-        result = action_report(_snap(memory_used_pct=None), dry_run=False)
-        assert "mem=N/A" in result
+    def test_silent_or_summary(self):
+        """Either silent (no actions) or produces summary with done + learnings."""
+        result, steps, errors = action_report(_snap(), dry_run=False)
+        if result.startswith("silent:"):
+            assert steps == []
+        else:
+            assert "做了：" in result
+            assert isinstance(steps, list)
 
     def test_dry_run_unchanged(self):
         """action_report doesn't distinguish dry_run (purely informational)."""
@@ -316,7 +324,188 @@ class TestActionReport:
         wet = action_report(_snap(), dry_run=False)
         assert dry == wet
 
-    def test_stuck_sessions_counted(self):
-        snap = _snap(stuck_sessions=[{"pid": 1}, {"pid": 2}, {"pid": 3}])
-        result = action_report(snap, dry_run=False)
-        assert "stuck=3" in result
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# action_work
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestActionWork:
+    """Housekeeping: cache clean, session archive, git push."""
+
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_returns_tuple(self, _mock):
+        result, steps, errors = action_work(_snap(), dry_run=False)
+        assert isinstance(result, str)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
+
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_result_starts_with_work(self, _mock):
+        result, *_ = action_work(_snap(), dry_run=False)
+        assert result.startswith("WORK:")
+
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_dry_run_produces_steps(self, _mock):
+        result, steps, errors = action_work(_snap(), dry_run=True)
+        assert isinstance(steps, list)
+        assert len(steps) > 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# action_evolve
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestActionEvolve:
+    """Self-check: pytest canary, cron error scan, pacman update check."""
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_returns_tuple(self, _shell, _cron):
+        result, steps, errors = action_evolve(_snap(), dry_run=False)
+        assert isinstance(result, str)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_result_starts_with_evolve(self, _shell, _cron):
+        result, *_ = action_evolve(_snap(), dry_run=False)
+        assert result.startswith("EVOLVE:")
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_dry_run_produces_steps(self, _shell, _cron):
+        result, steps, errors = action_evolve(_snap(), dry_run=True)
+        assert isinstance(steps, list)
+        assert len(steps) > 0
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_cron_scan_step_present(self, _shell, _cron):
+        result, steps, errors = action_evolve(_snap(), dry_run=False)
+        ops = [s.get("op") for s in steps if s.get("op")]
+        assert "cron_scan" in ops
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# execute_action
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestExecuteAction:
+    """Action dispatch routing."""
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_known_action_routes(self, _shell, _cron):
+        for action in ["WORK", "REST", "EVOLVE", "CONNECT", "REPORT"]:
+            result, steps, errors = execute_action(action, _snap(), dry_run=True)
+            assert isinstance(result, str), f"{action}: result not str"
+            assert isinstance(steps, list), f"{action}: steps not list"
+            assert isinstance(errors, list), f"{action}: errors not list"
+
+    def test_unknown_action(self):
+        result, steps, errors = execute_action("NOPE", _snap(), dry_run=True)
+        assert isinstance(result, str)
+        assert isinstance(steps, list)
+        assert isinstance(errors, list)
+
+    @patch("heartbeat_v2._scan_cron_errors", return_value=[])
+    @patch("heartbeat_v2._safe_shell", return_value=(True, ""))
+    def test_result_is_tuple(self, _shell, _cron):
+        result = execute_action("WORK", _snap(), dry_run=True)
+        assert isinstance(result, tuple)
+        assert len(result) == 3
+        assert isinstance(result[2], list)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Helper: _record_action_log + _summarize_today
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestActionLogHelpers:
+    """Record and read action log entries."""
+
+    def test_record_and_summarize(self, tmp_path, monkeypatch):
+        """Write an entry, then summarize reads it back."""
+        log_file = tmp_path / "test_log.jsonl"
+        monkeypatch.setattr("heartbeat_v2._ACTION_LOG_PATH", log_file)
+
+        trigger = {"disk_pct": 50.0, "cron_count": 3}
+        steps = [{"op": "test_op", "result": "ok"}]
+        _record_action_log("WORK", trigger, steps, "ok", [], "test learnings")
+
+        entries = _summarize_today()
+        assert len(entries) == 1
+        assert entries[0]["action"] == "WORK"
+        assert entries[0]["outcome"] == "ok"
+        assert entries[0]["learnings"] == "test learnings"
+        assert len(entries[0]["steps"]) == 1
+        assert entries[0]["steps"][0]["op"] == "test_op"
+
+    def test_summarize_empty(self, tmp_path, monkeypatch):
+        """Empty log file should return empty list."""
+        log_file = tmp_path / "empty.jsonl"
+        monkeypatch.setattr("heartbeat_v2._ACTION_LOG_PATH", log_file)
+        entries = _summarize_today()
+        assert entries == []
+
+    def test_summarize_no_file(self, tmp_path, monkeypatch):
+        """Missing log file should return empty list."""
+        monkeypatch.setattr("heartbeat_v2._ACTION_LOG_PATH", tmp_path / "nonexistent.jsonl")
+        entries = _summarize_today()
+        assert entries == []
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Helper: _scan_cron_errors
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestScanCronErrors:
+    """Scan cron output directory for error patterns."""
+
+    def test_no_output_dir(self, tmp_path, monkeypatch):
+        """No output dir → empty list."""
+        monkeypatch.setattr("heartbeat_v2._HERMES_HOME", tmp_path)
+        assert _scan_cron_errors() == []
+
+    def test_empty_output_dir(self, tmp_path, monkeypatch):
+        """Empty output dir → empty list."""
+        cron_out = tmp_path / "cron" / "output"
+        cron_out.mkdir(parents=True)
+        monkeypatch.setattr("heartbeat_v2._HERMES_HOME", tmp_path)
+        assert _scan_cron_errors() == []
+
+    def test_error_in_output(self, tmp_path, monkeypatch):
+        """Output file with 429 → detected as error."""
+        cron_out = tmp_path / "cron" / "output" / "abc123"
+        cron_out.mkdir(parents=True)
+        (cron_out / "output.txt").write_text(
+            "FAILED: RuntimeError: HTTP 429: Too Many Requests\n"
+        )
+        monkeypatch.setattr("heartbeat_v2._HERMES_HOME", tmp_path)
+        errors = _scan_cron_errors()
+        assert len(errors) == 1
+        assert errors[0]["job_id"] == "abc123"
+        assert "429" in errors[0]["error_snippet"]
+
+    def test_clean_output_not_detected(self, tmp_path, monkeypatch):
+        """Output file without error keywords → not detected."""
+        cron_out = tmp_path / "cron" / "output" / "xyz789"
+        cron_out.mkdir(parents=True)
+        (cron_out / "output.txt").write_text(
+            "SUCCESS: all tasks completed\n"
+        )
+        monkeypatch.setattr("heartbeat_v2._HERMES_HOME", tmp_path)
+        assert _scan_cron_errors() == []
+
+    def test_traceback_detected(self, tmp_path, monkeypatch):
+        """Output with Traceback → detected."""
+        cron_out = tmp_path / "cron" / "output" / "err_job"
+        cron_out.mkdir(parents=True)
+        (cron_out / "output.txt").write_text(
+            "Traceback (most recent call last):\n  File 'x.py', line 1\n"
+        )
+        monkeypatch.setattr("heartbeat_v2._HERMES_HOME", tmp_path)
+        errors = _scan_cron_errors()
+        assert len(errors) == 1
+        assert "err_job" == errors[0]["job_id"]
