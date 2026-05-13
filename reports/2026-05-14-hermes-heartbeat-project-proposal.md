@@ -260,44 +260,100 @@ class HeartbeatSnapshot:
 
 ---
 
-## 八、競品分析
+## 八、競品分析（2026-05-14 擴充版）
 
-### 8.1 市場全景
+> **搜尋策略**：8 組 GitHub API 查詢 + 4 組 web search + 3 個重點 repo deep-dive。涵蓋 self-healing、watchdog、health monitor、lifecycle、resilience、fault tolerance、autonomic computing、staged recovery 等關鍵詞組合。
 
-現有的 AI agent 監控/管理工具分為三類，**全部落在 observability 象限**：
+### 8.1 市場全景：Observability 飽和，Autonomy 真空
 
-| 類別 | 代表產品 | 核心功能 | 自主修復？ |
+現有的 AI agent 監控/管理工具分為四層，**前三層全部落在 observability 象限**：
+
+| 層級 | 代表產品 | 核心功能 | 自主修復？ |
 |------|---------|---------|:---:|
 | **LLM Observability** | LangSmith, Arize, Braintrust | Trace/debug/評估/prompt versioning | ❌ |
-| **Agent 專用監控** | AgentOps | Session replay/cost tracking/compliance | ❌ |
-| **基礎設施監控** | Prometheus + Alertmanager | Metrics → alert → pager | ❌（auto-scaling 不算自主修復） |
-| **GitHub 開源** | skrun, continuum, smolagents, Swarm | 任務執行 | ❌（完全沒有健康概念） |
-| **OpenClaw** | OpenClaw heartbeat/cron | Daemon-based 心跳 + 隔離 cron | ❌（cron 叫人類，不自己做維護） |
+| **Agent 專用監控** | AgentOps, `claw-agent-dashboard` (26⭐) | Session replay/cost tracking/compliance | ❌ |
+| **基礎設施監控** | Prometheus + Alertmanager | Metrics → alert → pager | ❌ |
+| **Agent Fleet 儀表板** | `agentpulse` (0⭐) | Datadog-like dashboard for agent fleets | ❌ |
+| **GitHub 開源框架** | skrun, continuum, smolagents, Swarm | 任務執行 | ❌（無健康概念） |
+| **OpenClaw 生態** | OpenClaw heartbeat/cron | Daemon-based 心跳 + 隔離 cron | ❌ |
 
-### 8.2 GitHub 即時搜尋結果（2026-05-14）
+### 8.2 少數「自稱自癒」的專案 — 但都不是 agent 自身維護
 
-搜尋 `autonomous agent maintenance self-healing`：**4 個 repos，全部 0 星**。確認這是接近真空的市場。
+#### OPENCRABS（744⭐）— 自我改進，非自我修復
+- **語言**：Rust 單一二進位檔（26MB）
+- **自癒機制**：RSI（Recursive Self-Improvement）— Agent 自主修改自己的 brain 檔案（提示詞），基於成功/失敗的回饋帳本
+- **核心問題**：修復對象是 **Agent 的行為策略**，不是 **Agent 的運行環境**
+- **vs Hermes**：OpenCrabs 優化「如何回答」，Hermes 維護「能否運行」。層級不同，不競爭。
 
-搜尋 `agent health monitoring llm`：找到 `claw-agent-dashboard`（26⭐，被動儀表板）和 `agent-coordinator`（3⭐，REST-based coordination）。無一具備自主閉環能力。
+#### SRE-AGENT-APP（66⭐）— 基礎設施自癒，非 agent 自癒
+- **語言**：Java 17 / Spring Boot 3 / LangChain4j
+- **自癒機制**：OODA 決策迴圈（Observe→Orient→Decide→Act），修復 K8s Pod 的 CrashLoopBackOff
+- **核心問題**：修復對象是 **Kubernetes 基礎設施**，不是 **AI agent 自身的健康**
+- **vs Hermes**：不同領域。SRE-Agent 是 AIOps 工具，Hermes 是 agent autonomic system。
 
-### 8.3 Hermes Heartbeat 的獨特定位
+#### LEDGERMIND（14⭐）— 最接近 Hermes Heartbeat 的設計
+- **語言**：Python 3.10+ / MCP 協議
+- **自癒機制**：5 分鐘背景 worker 循環 — Git 同步 → 反思 → 記憶衰減 → SQLite 索引自癒重建
+- **知識生命週期**：PATTERN → EMERGENT → CANONICAL 三階段演化
+- **衝突解決**：向量相似度 ≥70% 自動超集，50-70% LLM 豐富化
+- **vs Hermes**：兩者都追求自主知識管理，但 LedgerMind 專注於記憶層（knowledge lifecycle），Hermes Heartbeat 專注於維運層（disk/cron/provider/session）。**互補而非競爭。**
+
+#### heartbeat-helper-for-openclaw（0⭐）— 設計模式最接近
+- **語言**：純 shell script
+- **自癒機制**：**階梯式恢復（Staged Recovery Ladder）** — 連續失敗次數決定行動強度
+  - 1st failure → log
+  - 2nd → restart gateway + app
+  - 3rd → `openclaw doctor --diagnose`
+  - 4th → `openclaw doctor --fix --yes`
+- **特色**：DRY_RUN 模式、鎖定目錄避免並行、持久化失敗計數
+- **vs Hermes**：**這是目前找到最接近 Hermes Heartbeat 設計模式的專案。** 都是 5 分鐘級別的健康檢查 + 自主行動 + dry run + 狀態持久化。但它是固定階梯（if failure count = N → action），Hermes 是 scoring-based 動態選擇。Hermes 的設計更靈活、更通用。
+
+### 8.3 搜尋覆蓋率總結
+
+| 搜尋關鍵詞 | GitHub 總結果 | 有效自癒專案 | 與 Hermes 重疊 |
+|-----------|:---:|:---:|:---:|
+| `self-healing agent autonomous` | 376 | 9/10 | 無（都是 agent 行為改進或基礎設施修復） |
+| `agent watchdog autonomous recovery` | 1 | 1/1 | 部分（watchdog 概念） |
+| `agent health monitor self` | 25 | 5/10 | 間接（多為純監控） |
+| `agent lifecycle management autonomous` | 28 | 3/10 | 低（DevOps 領域） |
+| `autonomic computing agent self-managing` | **0** | — | 無（學術概念未落地） |
+| `agent resilience fault tolerance autonomous` | **0** | — | 無（分散式系統概念未跨入 agent 領域） |
+| `staged recovery agent` | **0** | — | 無（僅 OpenClaw shell script） |
+| `openclaw heartbeat health` | 3 | 3/3 | **最接近**（OpenClaw 生態有三個自癒 helper） |
+
+**三個「0 結果」查詢最有意義**：`autonomic computing`、`fault tolerance`、`staged recovery` 這些在傳統分散式系統中成熟的術語，在 AI agent 領域**完全沒有人用**。這不是搜不到——是真的沒人做。
+
+### 8.4 「Self-Healing」在不同專案中的語意漂移
 
 ```
-                    Observability（看問題）
-                         │
-    LangSmith ───────────┼────────── AgentOps
-    Arize                │           Braintrust
-    Prometheus           │
-                         │
-    ─────────────────────┼────────────────────→ Autonomy（修問題）
-                         │
-                         │     ★ Hermes Heartbeat
-                         │     （唯一在此象限）
+OpenCrabs:   Self-healing = Agent 改進自己的提示詞
+SRE-Agent:   Self-healing = Agent 修復 K8s Pod
+LedgerMind:  Self-healing = Agent 修復自己的記憶儲存層
+Heartbeat:   Self-healing = Agent 修復自己的運行環境（disk/cron/provider/session）
+OpenClaw:    Self-healing = Shell script 重啟 gateway（固定階梯）
 ```
 
-### 8.4 一句話定位（重複，因為重要）
+**結論**：「Self-Healing」是一個被過載的術語，在不同專案中指向完全不同的事物。Hermes Heartbeat 是唯一一個以「**運行環境維護**」為核心自癒對象的系統。
 
-> **Hermes Heartbeat 是唯一一個不是「幫你看問題」而是「幫你解決問題」的 AI agent 健康系統。**
+### 8.5 Hermes Heartbeat 的獨特定位
+
+```
+                         Observability（看問題）
+                              │
+         LangSmith ───────────┼────────── AgentOps
+         Arize                 │           Braintrust
+         Prometheus            │           claw-agent-dashboard
+                              │
+         ─────────────────────┼────────────────────→ Autonomy（修問題）
+                              │
+         OpenCrabs (改 prompt) │     ★ Hermes Heartbeat (修環境)
+         SRE-Agent (修 K8s)    │     ★ LedgerMind (修記憶) ← 互補
+         OpenClaw helper (階梯) │
+```
+
+### 8.6 一句話定位
+
+> **在 AI agent 自主運行環境維護這個細分領域，Hermes Heartbeat 沒有競品——它是第一個。</strong>OpenCrabs 改行為、SRE-Agent 修 K8s、LedgerMind 修記憶、OpenClaw helper 固定階梯。只有 Hermes Heartbeat 做 scoring-based 動態選擇的運行環境閉環維護。</strong>
 
 ---
 
@@ -413,6 +469,19 @@ class HeartbeatSnapshot:
 - OpenClaw heartbeat/cron architecture — 最接近的對照組
 - Anthropic "Managed Agents" — 三層解耦架構參考
 - Biological autonomic nervous system — 雙層設計靈感來源
+
+### D. 競品研究來源（2026-05-14 擴充）
+
+| 專案 | 連結 | 星數 | 定位 |
+|------|------|:---:|------|
+| `adolfousier/opencrabs` | [GitHub](https://github.com/adolfousier/opencrabs) | 744 | Agent 自我改進（改提示詞） |
+| `qicesun/SRE-Agent-App` | [GitHub](https://github.com/qicesun/SRE-Agent-App) | 66 | K8s 基礎設施自癒（OODA） |
+| `sl4m3/ledgermind` | [GitHub](https://github.com/sl4m3/ledgermind) | 14 | Agent 記憶自主管理 |
+| `ek-mc/heartbeat-helper-for-openclaw` | [GitHub](https://github.com/ek-mc/heartbeat-helper-for-openclaw) | 0 | OpenClaw 階梯式恢復 |
+| `danjdewhurst/openclaw-watchdog` | [GitHub](https://github.com/danjdewhurst/openclaw-watchdog) | 1 | OpenClaw watchdog |
+| `ArchieIndian/openclaw-superpowers` | [GitHub](https://github.com/ArchieIndian/openclaw-superpowers) | 61 | OpenClaw 技能包（純監控） |
+| `boydfd/claw-agent-dashboard` | [GitHub](https://github.com/boydfd/claw-agent-dashboard) | 26 | Agent 儀表板（被動） |
+| `SurgeCLI/Surge` | [GitHub](https://github.com/SurgeCLI/Surge) | 2 | 自學習可觀測性 |
 
 ---
 
