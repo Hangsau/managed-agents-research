@@ -1,0 +1,14 @@
+{
+  "name": "zaxbysauce/opencode-swarm",
+  "url": "https://github.com/zaxbysauce/opencode-swarm",
+  "description": "  Architect-centric agentic swarm plugin for OpenCode. Hub-and-spoke orchestration with SME consultation, code generation, and QA review.",
+  "stars": 314,
+  "updated": "2026-05-12",
+  "language": "TypeScript",
+  "skill_score": 5,
+  "skill_reasons": [
+    "popular (314 stars)",
+    "practical language (TypeScript)",
+    "relevant keywords"
+  ]
+}

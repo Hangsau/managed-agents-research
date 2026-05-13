@@ -1,0 +1,8 @@
+2026-05-13 研究報告: Multi-Agent Systems
+
+GitHub: 15 repos | arXiv: 1 papers | Web: 6 links
+Skill candidates: 11
+
+Top pick: google/adk-python (19606 ⭐)
+
+全文: /root/managed-agents/research/reports/2026-05-13.md
