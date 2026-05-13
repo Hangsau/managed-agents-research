@@ -1,5 +1,7 @@
 # Managed Agents
 
+> ⚠️ **This is NOT a multi-agent swarm.** It's a single-machine batch task runner for free-tier LLMs. The name "Managed Agents" reflects managed task execution, not autonomous multi-agent coordination. For swarm-like behavior, see Hermes Agent's delegate_task and cronjob subsystems.
+
 > A personal batch task runner for free-tier LLMs. Not an agent framework.
 
 This is a lightweight tool for running structured LLM tasks in batches using free API keys. It lives in the gap between "one-off curl" and "full agent framework".
