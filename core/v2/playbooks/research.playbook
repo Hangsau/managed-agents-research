@@ -1,0 +1,10 @@
+{
+  "name": "web_research",
+  "description": "Research a topic from multiple angles via web search.",
+  "vars": ["topic", "angle"],
+  "steps": [
+    {"action": "web_search", "query": "{{topic}} {{angle}}"},
+    {"action": "write_file", "path": "/tmp/research_{{topic}}_{{angle}}.md", "content": "Search results for {{topic}} ({{angle}}): see tool output above."},
+    {"action": "complete"}
+  ]
+}

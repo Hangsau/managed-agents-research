@@ -1,0 +1,9 @@
+=== Agent Run: bg-1930e0 ===
+Goal: Count lines in /workspace/test-bg.txt and report the number
+
+--- Turn 1 ---
+
+--- Turn 2 ---
+
+[OK] COMPLETED: done
+Total turns: 2

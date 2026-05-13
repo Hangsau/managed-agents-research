@@ -1,0 +1,10 @@
+{
+  "name": "data_collect",
+  "description": "Read a URL and extract structured data.",
+  "vars": ["url", "fields"],
+  "steps": [
+    {"action": "bash", "cmd": "curl -sL '{{url}}' | head -c 8000", "workdir": "/tmp"},
+    {"action": "write_file", "path": "/tmp/collect_{{url | replace('/', '_')}}.json", "content": "Raw data collected from {{url}}"},
+    {"action": "complete"}
+  ]
+}
