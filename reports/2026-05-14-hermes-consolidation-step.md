@@ -8,6 +8,18 @@
 - 兩個獨立探索（post-vector agent memory + beads）都指向同一個缺口
 - 三個外部系統獨立收斂到同一個設計：Google Always On（ConsolidateAgent）、Beads（compaction）、Agent Flywheel（CM + CASS → insights）
 - Hermes 已經有全部 input（13 篇 autonomous_notes、session_search、proposals/），只缺消化邏輯
+
+## STATUS
+
+| 欄位 | 值 |
+|------|-----|
+| **狀態** | 🟡 SPIKE 已設計 |
+| **階段** | SPIKE → 實作 → 測試 → 部署 |
+| **目前階段** | SPIKE 完成 |
+| **最後行動** | 05-14: ConsolidateAgent 設計完成 |
+| **下一步** | 實作 consolidation cron job |
+| **阻擋** | 無 |
+| **關聯** | WS-004 |
 - 飛輪效應缺最後一個齒輪：raw notes → structured insight → 驅動下一個探索/proposal
 
 **預估成本**:

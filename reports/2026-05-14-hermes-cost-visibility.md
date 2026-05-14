@@ -5,6 +5,18 @@
 **預估成本**: 2-4h 實作，低風險（純 additive）
 **前提**: 需先確認 provider API response 是否已包含 token usage（DeepSeek/Anthropic 都有 `usage` field）
 
+## STATUS
+
+| 欄位 | 值 |
+|------|-----|
+| **狀態** | ✅ DONE |
+| **階段** | 實作 → 測試 → 部署 |
+| **目前階段** | 完成 |
+| **最後行動** | 05-14: cost_aggregator.py + heartbeat callback 上線 |
+| **下一步** | — |
+| **阻擋** | 無 |
+| **關聯** | WS-003 |
+
 ## 背景
 
 LLM agent 成本是 O(n²)（見 [[2026-05-14-agent-cost-curve]]）。Hermes 架構隱含地做了很多對的事（agent cache, auto-continue, subagent delegation），但**完全不知道自己的 conversation 成本曲線長怎樣**。沒有 data，就無從優化。

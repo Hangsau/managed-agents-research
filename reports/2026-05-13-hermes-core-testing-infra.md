@@ -10,6 +10,18 @@
 - LLM-dependent 的路徑（REST/WORK 決策）沒辦法在 spike 階段測，只能測 data processing 部分
 - 要定義「可接受的 test coverage」範圍，避免 scope creep
 
+## STATUS
+
+| 欄位 | 值 |
+|------|-----|
+| **狀態** | ✅ DONE |
+| **階段** | Spike → 實作 → 測試 |
+| **目前階段** | 完成 |
+| **最後行動** | 05-13: 產出 test_heartbeat_v2.py（95 tests） |
+| **下一步** | — |
+| **阻擋** | 無 |
+| **關聯** | WS-001 |
+
 ## 狀態更新 (2026-05-14)
 
 **STATUS: DONE** — SPIKE 完成，產出 `~/.hermes/tests/test_heartbeat_v2.py` (511 行)，覆蓋範圍遠超預期。

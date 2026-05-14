@@ -28,6 +28,18 @@
 - Cleanup 失敗的 fallback：agent crash 後 worktree 沒清掉 → 需要 periodic prune
 - Merge conflict 還是會發生（兩個 agent 改同一檔案的不同 worktree），但至少不會在 development 階段互踩
 
+## STATUS
+
+| 欄位 | 值 |
+|------|-----|
+| **狀態** | ✅ DONE |
+| **階段** | Spike → 實作 → 測試 → 部署 |
+| **目前階段** | 完成 |
+| **最後行動** | 05-14: 上線為 skill `worktree-subagent-isolation` v1.0.0 |
+| **下一步** | — |
+| **阻擋** | 無 |
+| **關聯** | WS-002 |
+
 **→ 已產出完整實作計畫書**：[[2026-05-13-worktree-subagent-isolation-implementation-plan]]
 
 ## 狀態更新 (2026-05-14)
