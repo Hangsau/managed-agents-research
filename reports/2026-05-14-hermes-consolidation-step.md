@@ -13,11 +13,11 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟡 SPIKE 已設計 |
+| **狀態** | 🟢 Consolidation 上線 |
 | **階段** | SPIKE → 實作 → 測試 → 部署 |
-| **目前階段** | SPIKE 完成 |
-| **最後行動** | 05-14: ConsolidateAgent 設計完成 |
-| **下一步** | 實作 consolidation cron job |
+| **目前階段** | 實作完成 |
+| **最後行動** | 05-14 09:51: cron job memory-consolidator 已排程（每 12h），consolidate_memory.py 已寫，首次 synthesis 已完成（5 themes, 7 next steps） |
+| **下一步** | 觀察 cron job 產出品質，考慮加 decay 邏輯和 injection 層 |
 | **阻擋** | 無 |
 | **關聯** | WS-004 |
 - 飛輪效應缺最後一個齒輪：raw notes → structured insight → 驅動下一個探索/proposal
