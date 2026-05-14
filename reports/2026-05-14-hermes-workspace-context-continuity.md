@@ -6,12 +6,12 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 1 DONE |
+| **狀態** | 🟢 Phase 2 DONE |
 | **階段** | Phase 0 → Phase 1 → Phase 2 → Phase 3 |
-| **目前階段** | Phase 1 完成（session_state.md + workspace_session.py + session-continuity skill 更新） |
-| **最後行動** | 05-14 09:35: Phase 1 完成：跨 session 記憶系統上線 |
-| **下一步** | Phase 2：Agent Convention Guide — 寫入人格確保 agent 自主更新 STATUS |
-| **阻擋** | 無 |
+| **目前階段** | Phase 2 完成（assistant-personality skill 加入 Workspace Awareness 慣例） |
+| **最後行動** | 05-14 09:38: assistant-personality skill 更新：agent 自主更新 STATUS 的規範已寫入人格 |
+| **下一步** | Phase 3：Heartbeat drift sensor — check_workspace_sync() |
+| **阻擋** | Phase 2.3 驗證需要跨 session 觀察，短期無法完成 |
 | **關聯** | WS-005 |
 
 ## 一句話
@@ -152,12 +152,12 @@ grep "IN PROGRESS" -A 20 ~/.hermes/workspace/INDEX.md  # 活躍專案
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 1 DONE |
+| **狀態** | 🟢 Phase 2 DONE |
 | **階段** | 設計 → 實作 → 測試 → 部署 |
-| **目前階段** | Phase 1 完成（session_state.md + workspace_session.py + session-continuity skill 更新） |
-| **最後行動** | 05-14 09:35: Phase 1 完成：跨 session 記憶系統上線 |
-| **下一步** | Phase 2：Agent Convention Guide — 寫入人格確保 agent 自主更新 STATUS |
-| **阻擋** | 無 |
+| **目前階段** | Phase 2 完成（assistant-personality skill 加入 Workspace Awareness 慣例） |
+| **最後行動** | 05-14 09:38: assistant-personality skill 更新：agent 自主更新 STATUS 的規範已寫入人格 |
+| **下一步** | Phase 3：Heartbeat drift sensor — check_workspace_sync() |
+| **阻擋** | Phase 2.3 驗證需要跨 session 觀察，短期無法完成 |
 | **關聯** | WS-005 |
 ```
 
