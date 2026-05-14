@@ -1,23 +1,21 @@
 # Hermes Heartbeat：AI Agent 自主穩態維護系統 — 專案計畫書
 
 > **文件日期**：2026-05-14  
-> **版本**：v1.0  
+> **版本**：v2.0  
 > **作者**：Hermes Heartbeat Team（Hang Yeh + Hestia）  
-> **對應程式碼**：`~/.hermes/scripts/heartbeat_v2.py`（912 行）  
-> **測試**：`test_heartbeat_v2.py`（53 tests, 0.20s）  
+> **對應程式碼**：`~/.hermes/scripts/heartbeat/`（模組化 7 檔案）  
+> **測試**：`test_heartbeat_v2.py`（95 tests: 71 core + 24 modularized）  
 > **授權**：MIT（暫定）
-
-**⚠️ 文件漂移警告**：此文件凍結在 v1.0（912 行、53 tests）。實際狀態：已模組化成 7 檔案、95 tests，heartbeat_v2.py 變 thin wrapper。
 
 ## STATUS
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟠 文件凍結（系統上線中） |
-| **階段** | 實作 v1 → 模組化 v2 |
-| **目前階段** | 文件需更新（反映實際 v2 模組化架構） |
-| **最後行動** | 05-14: 模組化完成（7 modules、95 tests） |
-| **下一步** | 更新計畫書反映實際架構 |
+| **狀態** | 🟢 v2.0 文件同步完成 |
+| **階段** | 實作 v1 → 模組化 v2 → 文件更新 |
+| **目前階段** | 文件已反映實際架構（模組化 7 檔案、95 tests、drift sensor） |
+| **最後行動** | 05-14: 計畫書同步至 v2.0（模組化架構 + drift sensor + 95 tests） |
+| **下一步** | Phase 4：學習管線完善（learning-extraction、log rotation、動態閾值） |
 | **阻擋** | 無 |
 | **關聯** | WS-006 |
 
@@ -92,18 +90,23 @@ Heartbeat：  Sensor → Score → Decide → Act → Record → Report (only if
 
 ## 三、架構總覽
 
-### 3.1 雙層設計（借鑒神經科學）
+### 3.1 雙層設計（借鑒神經科學）+ 模組化實作
+
+> **v2.0 模組化**（05-14）：原 912 行單一檔案已拆分為 7 個模組（`heartbeat/` 目錄）：
+> `__init__.py` `config.py` `snapshot.py` `utils.py` `actions.py` `autonomic.py` `scheduler.py`
+> `heartbeat_v2.py` 現為 thin wrapper（~50 行），代理給模組。測試也已模組化（71 core + 24 per-module = 95 tests）。
 
 ```
 自主神經層（Autonomic Layer）          認知循環層（Cognitive Layer）
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 觸發頻率：每 30 秒                    觸發頻率：每 30 分鐘（僅空閒時）
+模組：autonomic.py                   模組：scheduler.py → actions.py
 功能：                               功能：
   ├─ get_snapshot()                   ├─ 檢查是否在認知間隔內
   │   ├─ disk_usage()                 ├─ score_actions()
   │   ├─ memory_usage()               │   ├─ WORK（cache/session/git）
   │   ├─ active_sessions()            │   ├─ CONNECT（provider health）
-  │   ├─ failed_platforms()           │   ├─ EVOLVE（self-check）
+  │   ├─ failed_platforms()           │   ├─ EVOLVE（self-check + drift scan）
   │   └─ stuck_agents()               │   ├─ REPORT（summary）
   ├─ 寫入 heartbeat_state.json        │   └─ REST（do nothing）
   ├─ 偵測 stuck agent → send_interrupt│  ├─ select_action() → 選最高分
@@ -131,6 +134,7 @@ class HeartbeatSnapshot:
     cache_size_mb: float               # ~/.cache/ 大小
     action_history: list[dict]         # 歷史行動記錄
     kanban_ready: int                  # 就緒的 kanban 任務數
+    workspace_drift: list[dict]        # v2.0: INDEX.md vs proposal STATUS 漂移（index_stale/proposal_missing/status_drift/proposal_stale）
 ```
 
 #### Action Log Entry（每行動一條）
@@ -172,14 +176,14 @@ class HeartbeatSnapshot:
 | **安全性** | pause 只阻止下次排程，不中斷正在跑的工作；加 cooldown 防止 flicker 重複操作 |
 | **不做事** | 不自動換 provider、不改 job config |
 
-### 4.3 EVOLVE — 自我檢查
+### 4.3 EVOLVE — 自我檢查 + Workspace Drift 偵測
 
 | 項目 | 內容 |
 |------|------|
 | **觸發條件** | 上次 EVOLVE > 6 小時前 |
-| **行動** | 1. `pytest test_heartbeat_v2.py -v --tb=short` → 記錄失敗<br>2. `pacman -Sy --dry-run` → 記錄可用更新<br>3. `_scan_cron_errors()` → 記錄有問題的 cron job |
-| **安全性** | 測試只跑自己的 test suite；pacman 只用 dry-run；cron scan 只讀最後一個 output |
-| **不做事** | 不自動修測試、不自動 update package、不自動修 cron |
+| **行動** | 1. `pytest test_heartbeat_v2.py -v --tb=short` → 記錄失敗<br>2. `pacman -Sy --dry-run` → 記錄可用更新<br>3. `_scan_cron_errors()` → 記錄有問題的 cron job<br>4. **`check_workspace_sync()`（v2.0 新增）**→ 掃描 INDEX.md vs 提案 STATUS，偵測四種漂移：`index_stale` / `proposal_missing` / `status_drift` / `proposal_stale` |
+| **安全性** | 測試只跑自己的 test suite；pacman 只用 dry-run；cron scan 只讀最後一個 output；drift scan 純檔案讀取，零副作用 |
+| **不做事** | 不自動修測試、不自動 update package、不自動修 cron、不自動修正漂移（只報告） |
 
 ### 4.4 REPORT — 有意義的摘要
 
@@ -437,8 +441,8 @@ OpenClaw:    Self-healing = Shell script 重啟 gateway（固定階梯）
 
 | 指標 | 目標 | 現狀 |
 |------|------|------|
-| 測試覆蓋率 | > 60% | 35%（Phase 3 新增後待測） |
-| 測試執行時間 | < 1s | 0.20s（53 tests）✅ |
+| 測試覆蓋率 | > 60% | 35%（95 tests, ~0.3s）|
+| 測試執行時間 | < 1s | ~0.3s（95 tests）✅ |
 | 每週人為介入次數 | < 3 次 | 待追蹤 |
 | 誤報率（pause 了不該 pause 的 job） | 0 | 0（Phase 3 剛上線） |
 | Cron error 發現時間 | < 1 小時 | 即時（30 分鐘）✅ |
@@ -455,20 +459,28 @@ OpenClaw:    Self-healing = Shell script 重啟 gateway（固定階梯）
 
 ## 十二、附錄
 
-### A. 檔案清單
+### A. 檔案清單（v2.0）
 
+**核心模組**（`~/.hermes/scripts/heartbeat/`）：
 | 路徑 | 說明 |
 |------|------|
-| `~/.hermes/scripts/heartbeat_v2.py` | 核心程式（912 行） |
-| `~/.hermes/scripts/test_heartbeat_v2.py` | 測試（53 tests） |
+| `heartbeat/__init__.py` | 模組初始化 + 公開 API 匯出 |
+| `heartbeat/config.py` | 配置管理（閾值、路徑、cooldown） |
+| `heartbeat/snapshot.py` | `HeartbeatSnapshot` dataclass（含 `workspace_drift`）+ `build_heartbeat_snapshot()` |
+| `heartbeat/utils.py` | 共用工具 + `check_workspace_sync()` drift sensor（~150 行） |
+| `heartbeat/actions.py` | 五大閉環行動邏輯（WORK/CONNECT/EVOLVE/REPORT/REST） |
+| `heartbeat/autonomic.py` | 自主神經層（30s 掃描 + stuck agent 偵測） |
+| `heartbeat/scheduler.py` | 認知循環排程器（30 分鐘空閒時觸發） |
+
+**其他檔案**：
+| 路徑 | 說明 |
+|------|------|
+| `~/.hermes/scripts/heartbeat_v2.py` | Thin wrapper（~50 行，代理給 `heartbeat/` 模組） |
+| `~/.hermes/scripts/test_heartbeat_v2.py` | 測試（95 tests: 71 core + 24 modularized） |
 | `~/.hermes/plans/heartbeat-phase3-closed-loop.md` | Phase 3 計畫書 |
 | `~/.hermes/heartbeat_state.json` | 自主神經層快照 |
 | `~/.hermes/heartbeat_decisions.jsonl` | 認知層決策記錄 |
 | `~/.hermes/heartbeat_action_log.jsonl` | 行動記錄（學習管線輸入） |
-| `~/.hermes/skills/automation/heartbeat-competitive-landscape/` | 競品研究 skill |
-| `~/.hermes/skills/automation/heartbeat-reporting/` | REPORT 實作 skill |
-| `~/.hermes/skills/automation/heartbeat-v2-autonomous-maintenance/` | 自主維護 skill |
-| `~/.hermes/skills/automation/heartbeat-test-runner/` | 測試 runner skill |
 
 ### B. 依賴
 

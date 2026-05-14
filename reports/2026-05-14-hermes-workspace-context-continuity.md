@@ -6,12 +6,12 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 3 DONE（0/1/2/3/4 done） |
+| **狀態** | ✅ DONE（Phase 0-4 全完成）|
 | **階段** | Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4 |
-| **目前階段** | Phase 3 完成（drift sensor 上線） |
-| **最後行動** | 05-14: check_workspace_sync() 整合進 heartbeat snapshot，每 cycle 自動掃描 INDEX.md vs 提案 STATUS，偵測漂移 |
-| **下一步** | Phase 4：Skill 包裝（workspace-manager skill）|
-| **阻擋** | Phase 2.3 驗證需要跨 session 觀察，短期無法完成 |
+| **目前階段** | Phase 4 完成 — 已包裝為 workspace-manager skill |
+| **最後行動** | 05-14: Phase 3 drift sensor + Phase 4 skill 包裝完成，skill 含 INDEX.md 格式、STATUS 區塊規範、三腳本、drift sensor 文件 |
+| **下一步** | 無 — 關閉專案 |
+| **阻擋** | 無 |
 | **關聯** | WS-005 |
 
 ## 一句話
