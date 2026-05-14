@@ -6,11 +6,11 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 0 DONE |
+| **狀態** | 🟢 Phase 1 DONE |
 | **階段** | Phase 0 → Phase 1 → Phase 2 → Phase 3 |
-| **目前階段** | Phase 0 完成（INDEX.md + STATUS ×6 + workspace_update.py + workspace_inject.py） |
-| **最後行動** | 05-14 09:22: Phase 0 完成，兩個 scripts 測試通過 |
-| **下一步** | 進入 Phase 1：session_state.md 寫入與注入 |
+| **目前階段** | Phase 1 完成（session_state.md + workspace_session.py + session-continuity skill 更新） |
+| **最後行動** | 05-14 09:35: Phase 1 完成：跨 session 記憶系統上線 |
+| **下一步** | Phase 2：Agent Convention Guide — 寫入人格確保 agent 自主更新 STATUS |
 | **阻擋** | 無 |
 | **關聯** | WS-005 |
 
@@ -152,11 +152,11 @@ grep "IN PROGRESS" -A 20 ~/.hermes/workspace/INDEX.md  # 活躍專案
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 0 DONE |
+| **狀態** | 🟢 Phase 1 DONE |
 | **階段** | 設計 → 實作 → 測試 → 部署 |
-| **目前階段** | Phase 0 完成（INDEX.md + STATUS ×6 + workspace_update.py + workspace_inject.py） |
-| **最後行動** | 05-14 09:22: Phase 0 完成，兩個 scripts 測試通過 |
-| **下一步** | 進入 Phase 1：session_state.md 寫入與注入 |
+| **目前階段** | Phase 1 完成（session_state.md + workspace_session.py + session-continuity skill 更新） |
+| **最後行動** | 05-14 09:35: Phase 1 完成：跨 session 記憶系統上線 |
+| **下一步** | Phase 2：Agent Convention Guide — 寫入人格確保 agent 自主更新 STATUS |
 | **阻擋** | 無 |
 | **關聯** | WS-005 |
 ```
