@@ -11,11 +11,11 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 v2.0 文件同步完成 |
+| **狀態** | 🟢 v2.0 文件同步完成 + Phase 4 已實質完成 |
 | **階段** | 實作 v1 → 模組化 v2 → 文件更新 |
-| **目前階段** | 文件已反映實際架構（模組化 7 檔案、95 tests、drift sensor） |
-| **最後行動** | 05-14: 計畫書同步至 v2.0（模組化架構 + drift sensor + 95 tests） |
-| **下一步** | Phase 4：學習管線完善（learning-extraction、log rotation、動態閾值） |
+| **目前階段** | Phase 4 項目在 Phase 2-3 重構時已實作（heartbeat_learning.py、action log rotation、provider recovery、coverage tracking），僅動態閾值延後。extract_learning.py vault 整合待排。 |
+| **最後行動** | 05-14: Phase 4 實施計劃因錯估 codebase 而被取消（計劃假設 bash，實際 Python；功能已預先存在）。提案 STATUS 更新以反映實際完成狀態。 |
+| **下一步** | extract_learning.py 整合到 EVOLVE（小 task）+ 動態閾值（需數據積累） |
 | **阻擋** | 無 |
 | **關聯** | WS-006 |
 
@@ -405,15 +405,16 @@ OpenClaw:    Self-healing = Shell script 重啟 gateway（固定階梯）
 
 ## 十、未來迭代路線圖
 
-### Phase 4：學習管線完善（預估 2-3 週）
+### Phase 4：學習管線完善 ✅ 已實質完成（僅動態閾值延後）
 
-| 項目 | 內容 |
-|------|------|
-| **learning-extraction 整合** | 定期處理 `heartbeat_action_log.jsonl`，用 Jaccard similarity 去重，提煉 pattern |
-| **action log rotation** | 超過 30 天的 log 自動歸檔或壓縮 |
-| **動態閾值** | cache clean 的 7 天閾值根據實際 disk 壓力動態調整 |
-| **provider recovery 自動檢測** | 不只被動等 `failed_platforms` 清空，定期主動 probe degraded provider |
-| **自我測試覆蓋率追蹤** | EVOLVE 記錄 coverage % 變化，下降時標記 |
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| **learning-extraction 整合** | ✅ 已完成 | `heartbeat_learning.py` 已在 EVOLVE 中呼叫，Jaccard dedup，四種 pattern detector |
+| **action log rotation** | ✅ 已完成 | `_rotate_action_log()` 在 main.py 每次循環自動歸檔 >30 天記錄 |
+| **動態閾值** | ⏸️ 延後 | 需足夠數據積累後校準，Phase 5 之前評估 |
+| **provider recovery 自動檢測** | ✅ 已完成 | CONNECT 行動主動 probe degraded provider + 自動 unpause jobs |
+| **自我測試覆蓋率追蹤** | ✅ 已完成 | EVOLVE 記錄 coverage % 變化，delta 納入快照 |
+| **extract_learning.py vault 整合** | 📋 待排 | 現有 extract_learning.py（寫 Obsidian vault）未被 heartbeat 觸發——小 task，非緊急 |
 
 ### Phase 5：跨 Agent 與 Chaos（預估 1-2 月）
 

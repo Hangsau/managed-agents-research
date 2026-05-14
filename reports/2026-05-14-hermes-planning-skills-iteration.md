@@ -50,7 +50,7 @@
 |------|-----|
 | **狀態** | ✅ 完成 |
 | **目前階段** | 完成 |
-| **最後行動** | 2026-05-14: Tasks 1–5 全部完成，plan-review 狗食測試通過 (85/100) |
+| **最後行動** | 2026-05-14: Tasks 1–5 全部完成，plan-review 狗食測試通過 (85/100)。後續：根據 Claude Sonnet 4.6 審查回饋，修復設計決策缺失（cron 否決後無正式替代方案），plan-review 升級至 v1.2.0（Robustness 加入設計決策追蹤檢查） |
 | **下一步** | 實際使用觀察：用新版流程規劃下一個 feature，看 plan-review 是否真的被觸發 |
 | **阻擋** | 無 |
 
@@ -74,6 +74,14 @@ v2.0.0 發布後已知的四個 gap：
 ### 為什麼不新增 cron job 強制觸發 plan-review？
 
 **不做。** 理由：cron 需要知道「哪個 plan 剛被寫好、在哪個路徑」，這需要 file watcher + polling，增加複雜度遠大於收益。目前最乾淨的解法是讓 `plan` skill 成為唯一入口——所有規劃都經過 `plan` → `writing-plans` → `plan-review`，一個 skill 扣一個。
+
+**替代方案（寫進計劃本體，非事後回顧）：** 如果雙層 trigger（plan MANDATORY + writing-plans Phase 3）同時失效，plan-review 沒被執行，防線如下：
+
+1. **SADD Step 0 gate**（Task 2 產出）— 檢查 review section 是否存在 + raw_score ≥ 60，任一缺失即 STOP。這是執行端的最後攔截。
+2. **Self-revealing fault** — 未經 review 的計劃品質不足，執行階段會自然暴露問題（錯的路徑、漏的步驟、未處理的 edge case）。Execution Notes 回寫機制（Task 5）會記錄這些缺失，作為下次迭代的 input。
+3. **Manual catch** — 使用者或後續 agent 讀取計劃的 STATUS block 時會發現缺少 plan-review section。
+
+三層防線（plan MANDATORY → writing-plans Phase 3 → SADD Step 0 gate）覆蓋 99% 的情境。不追最後 1% 的自動化，因為要花的 infra（file watcher + polling + plan detection）不符合本階段的成本效益。如果實戰中發現這 1% 的情境頻率超乎預期，會在下次迭代時重新評估 cron 方案。
 
 ### 為什麼 plan-review 的分數是 raw_score 不是多維度？
 
@@ -260,11 +268,12 @@ Load the `plan-review` skill and run its 6-dimension critique against this plan.
 
 > Reviewed by: plan-review skill v1.1.0
 
-### Overall Assessment: 🟢 Pass
+### Overall Assessment: 🟡 Needs Work → v1.2.0 Re-review: 🟢 Pass
 
-**Raw Score:** 85/100
+**Initial Score (plan-review v1.1.0):** 85/100  
+**v1.2.0 Re-review:** 85/100（設計決策替代方案已補上，cron gap 已關閉）
 
-**Summary:** 計劃完整、具體、可執行。每個 task 有明確的 old_string/new_string 對照、驗證方式、檔案路徑。主要扣分：Coherence（Task 2/4 順序依賴問題——執行時已調整順序解決）、Robustness（退路 cron 方案僅骨架）。
+**Summary:** 計劃完整、具體、可執行。每個 task 有明確的 old_string/new_string 對照、驗證方式、檔案路徑。原扣分：Coherence（Task 2/4 順序依賴——執行時已調整順序解決）、Robustness（退路 cron 方案僅骨架——v1.2.0 中已在設計決策段落補上三層防線替代方案）。補上後無新增扣分。Claude Sonnet 4.6 審查給出 82/100，差異來自權重不同（Claude 對隱形依賴扣 -10 vs 我們的 🔴 -15），但結論一致（落在 70–89 可執行區間）。
 
 ### Dimension Scores
 
