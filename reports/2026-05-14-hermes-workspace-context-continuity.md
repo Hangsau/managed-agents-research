@@ -6,11 +6,11 @@
 
 | 欄位 | 值 |
 |------|-----|
-| **狀態** | 🟢 Phase 2 DONE |
-| **階段** | Phase 0 → Phase 1 → Phase 2 → Phase 3 |
-| **目前階段** | Phase 2 完成（assistant-personality skill 加入 Workspace Awareness 慣例） |
-| **最後行動** | 05-14 09:38: assistant-personality skill 更新：agent 自主更新 STATUS 的規範已寫入人格 |
-| **下一步** | Phase 3：Heartbeat drift sensor — check_workspace_sync() |
+| **狀態** | 🟢 Phase 3 DONE（0/1/2/3/4 done） |
+| **階段** | Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4 |
+| **目前階段** | Phase 3 完成（drift sensor 上線） |
+| **最後行動** | 05-14: check_workspace_sync() 整合進 heartbeat snapshot，每 cycle 自動掃描 INDEX.md vs 提案 STATUS，偵測漂移 |
+| **下一步** | Phase 4：Skill 包裝（workspace-manager skill）|
 | **阻擋** | Phase 2.3 驗證需要跨 session 觀察，短期無法完成 |
 | **關聯** | WS-005 |
 
@@ -276,13 +276,13 @@ def check_workspace_sync() -> list[SyncIssue]:
 | 2.2 | 在 agent personality 加入慣例提示 | 更新 personality skill |
 | 2.3 | 實際跑幾次 task → 觀察 agent 是否自主更新 | 驗證 |
 
-### Phase 3：Heartbeat Drift Detection（~30 分鐘）
+### Phase 3：Heartbeat Drift Detection（~30 分鐘） ✅ DONE
 
-| 步驟 | 內容 | 產出 |
-|------|------|------|
-| 3.1 | 在 heartbeat sensor 加入 `check_workspace_sync()` | 新 sensor |
-| 3.2 | 在 REPORT action 加入漂移警告 | 報告增強 |
-| 3.3 | 手動製造一個 stale 文件 → 確認偵測 | 驗證 |
+| 步驟 | 內容 | 產出 | 狀態 |
+|------|------|------|------|
+| 3.1 | 在 heartbeat sensor 加入 `check_workspace_sync()` | 新 sensor | ✅ |
+| 3.2 | 在 EVOLVE action 加入漂移診斷 | 整合完成 | ✅ |
+| 3.3 | 手動製造一個 stale 文件 → 確認偵測 | 驗證通過 | ✅ |
 
 ### Phase 4：Skill 包裝（~30 分鐘）
 
@@ -334,8 +334,8 @@ def check_workspace_sync() -> list[SyncIssue]:
 
 - [ ] 新 session 啟動後，agent 不需要搜尋就知道有哪些 IN PROGRESS 專案
 - [ ] 人類說「繼續」時，agent 直接從 workspace context 找到對的專案
-- [ ] 心跳提案的 STATUS 區塊反映實際 95 tests + 模組化架構
-- [ ] Heartbeat REPORT 開始顯示文件漂移警告（如果有的話）
+- [x] 心跳提案的 STATUS 區塊反映實際 95 tests + 模組化架構
+- [x] Heartbeat REPORT 開始顯示文件漂移警告（drift sensor 已上線，整合進 EVOLVE action）
 - [ ] 連續 3 個專案完成後，human 不需要手動更新任何文件
 
 ---
@@ -366,6 +366,6 @@ def check_workspace_sync() -> list[SyncIssue]:
 | WS-001 | Core Testing Infra | `reports/2026-05-13-hermes-core-testing-infra.md` | ✅ DONE（95 tests，但提案寫 51） |
 | WS-002 | Worktree Subagent Isolation | `reports/2026-05-13-hermes-worktree-subagent-isolation.md` | ✅ DONE |
 | WS-003 | Cost Visibility | `reports/2026-05-14-hermes-cost-visibility.md` | ✅ DONE |
-| WS-004 | Consolidation Step | `reports/2026-05-14-hermes-consolidation-step.md` | 🟡 SPIKE 設計完成，未寫 code |
-| WS-005 | Workspace Manager | `reports/2026-05-14-hermes-workspace-context-continuity.md` | 🟢 本提案 |
+| WS-004 | Consolidation Step | `reports/2026-05-14-hermes-consolidation-step.md` | 🟢 上線 — cron 每 12h 消化筆記 |
+| WS-005 | Workspace Manager | `reports/2026-05-14-hermes-workspace-context-continuity.md` | 🟢 Phase 3 DONE — drift sensor 上線 |
 | — | Heartbeat v2 | `reports/2026-05-14-hermes-heartbeat-project-proposal.md` | 🟢 已上線但文件凍在 v1.0 |
