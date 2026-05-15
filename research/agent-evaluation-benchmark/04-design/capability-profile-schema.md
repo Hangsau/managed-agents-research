@@ -42,13 +42,16 @@ Every dimension score uses this exact shape:
 }
 ```
 
-**Status semantics** (answers DQ-2 and DQ-6):
+**Status semantics** (answers DQ-2 and DQ-6; v3 adds `smoke_only`, `ceiling_limited`, `insufficient_clean_trials`):
 
 | Status | Meaning | `score` field |
 |--------|---------|---------------|
-| `"scored"` | Successfully measured | float ∈ [0,1] |
+| `"scored"` | Successfully measured at full trial count with variance under target | float ∈ [0,1] |
+| `"smoke_only"` (v3) | Single-trial pilot — score exists but no variance estimate. Use for smoke pilot only. | float ∈ [0,1], stddev null |
 | `"na"` | Not applicable — interface lacks affordance or test mode not run | `null` |
-| `"high_variance"` | Trials completed but stddev > threshold; signal insufficient | `null` (mean exists in trial data but not surfaced as score) |
+| `"high_variance"` | Trials completed but stddev > threshold; signal insufficient | `null` |
+| `"insufficient_clean_trials"` (v3) | After drift-filtering, fewer than 3 clean trials available | `null` |
+| `"ceiling_limited"` (v3 — per R1-A W4) | Score bounded above by architectural ceiling, not capability ceiling. `score` reports the empirical observation; `ceiling_value` reports the structural maximum the subject can achieve. | float ∈ [0,1], plus `ceiling_value` field |
 | `"trial_failed"` | All trials errored at harness level (not subject failure) | `null` |
 
 **Critical rule**: When `status != "scored"`, the `score` field is **strictly `null`**, never `0`. Visualization libraries must distinguish `null` (gray bar, "N/A" label) from `0.0` (filled bar at zero, "tried and failed" label). A profile renderer that maps null to 0 is non-conformant.

@@ -210,7 +210,16 @@ Score = 1.0 if subject's answer is exactly -22, 0.0 otherwise.
 
 **Generator**: Paraphrase chain generator (LLM-driven paraphrasing of a seed prompt; subject must produce same answer across paraphrases).
 
-**Scoring**: Consistency metric — score = (most-common-answer count / 10). Maximum if all paraphrases produce the same answer.
+**Scoring** (v3 — rewritten per R1-A W11): Two-component metric that decomposes correctness from internal consistency:
+
+- `correctness_rate`: pass/fail per paraphrase against objective oracle (where one exists). Range [0,1].
+- `consistency_rate`: agreement rate of the subject across paraphrases (most-common-answer count / N). Range [0,1].
+
+**Combined score**:
+- If `correctness_rate < 0.3`: score = `correctness_rate` (consistency is uninformative; subject is consistently wrong)
+- Else: score = `0.5 * correctness_rate + 0.5 * consistency_rate`
+
+v1 used consistency alone, which rewarded "consistently wrong" answers as much as "consistently right" answers. v3 anchors consistency to correctness; sycophantic consistency on wrong answers is penalized.
 
 ---
 

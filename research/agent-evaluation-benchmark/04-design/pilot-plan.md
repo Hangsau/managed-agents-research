@@ -149,7 +149,7 @@ A pilot is **FAILED** when any of:
 
 ## 4. Hypotheses being tested by the pilot
 
-1. **H1 — Environment isolation**: Subjects 1, 2, 3 (same LLM, different env) score within ±0.05 on Track A. **Falsification**: divergence >0.20 means framework conflates LLM with environment on Track A — fatal flaw, must redesign.
+1. **H1 — Environment effect on abstract scores** (v3 — reformulated per architecture.md v2 construct rewrite; replaces old kill-switch wording): Subjects 1, 2, 3 (same LLM, different env) Track A scores diverge by some delta D. **Interpretation**: small D (<0.05) means the deployed environment adds minimal scaffolding to abstract-style prompts; large D (>0.20) means environment scaffolding meaningfully reshapes abstract output — this is a **finding to report**, not a falsification. The v2 architecture construct (Track A measures the deployed system on abstract prompts, NOT the underlying LLM stripped of environment) makes any D value interpretable rather than fatal.
 
 2. **H2 — Environment value-add quantifiable**: Subject 3 - Subject 2 differential on Track B B11 (multi-file mutation) is >0.10. **Falsification**: indifference would suggest skills/MCP/CLAUDE.md add no measurable Track B capability — surprising and worth investigating.
 

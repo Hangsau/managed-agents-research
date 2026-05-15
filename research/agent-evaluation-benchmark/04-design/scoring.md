@@ -148,6 +148,7 @@ The framework tags each trial's failure mode using this fixed taxonomy. Each Tra
 
 ```python
 def score_dimension(subject, dimension, task_pool, judge_panel):
+    """v3 fix per R1-A W12: recompute stddev after loop; guard against empty clean trials."""
     trials = []
     while len(trials) < N_MAX:
         task = task_pool.draw(dimension)
@@ -156,19 +157,35 @@ def score_dimension(subject, dimension, task_pool, judge_panel):
         # Identity drift handling
         if subject.identity_hash() != trials[0].identity_hash:
             trial.flags.append("identity_drift")
-        # Variance check
-        if len(trials) >= N_MIN:
-            stddev = std([t.score for t in trials if "identity_drift" not in t.flags])
-            if stddev < target_stddev(dimension):
+        # Variance check (only check if enough clean trials accumulated)
+        clean = [t for t in trials if "identity_drift" not in t.flags]
+        if len(clean) >= N_MIN:
+            try:
+                running_stddev = statistics.stdev([t.score for t in clean])
+            except statistics.StatisticsError:
+                running_stddev = float("inf")
+            if running_stddev < target_stddev(dimension):
                 break
 
-    if stddev > target_stddev(dimension):
-        return DimensionResult(status="high_variance", score=None, trials=trials)
+    # Final recompute after loop exits
+    clean = [t for t in trials if "identity_drift" not in t.flags]
+    if len(clean) < 3:
+        return DimensionResult(status="insufficient_clean_trials", score=None,
+                               stddev=None, trials_used=0, trials=trials)
+    try:
+        final_stddev = statistics.stdev([t.score for t in clean])
+    except statistics.StatisticsError:
+        return DimensionResult(status="insufficient_clean_trials", score=None,
+                               stddev=None, trials_used=len(clean), trials=trials)
+    if final_stddev > target_stddev(dimension):
+        return DimensionResult(status="high_variance", score=None,
+                               stddev=final_stddev, trials_used=len(clean),
+                               trials=trials)
     return DimensionResult(
         status="scored",
-        score=mean([t.score for t in trials if "identity_drift" not in t.flags]),
-        stddev=stddev,
-        trials_used=len([t for t in trials if "identity_drift" not in t.flags]),
+        score=statistics.mean([t.score for t in clean]),
+        stddev=final_stddev,
+        trials_used=len(clean),
         failure_modes=collect_failure_modes(trials),
         trials=trials,
     )
