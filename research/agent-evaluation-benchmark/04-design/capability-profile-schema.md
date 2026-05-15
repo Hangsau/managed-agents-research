@@ -162,7 +162,7 @@ Pareto sweeps cost ≥5× single-point evaluation; opt-in only.
         "ref_claude_code_vanilla": 0.83,
         "ref_claude_code_full": 0.82,
         "max_pairwise_delta": 0.03,
-        "interpretation": "negligible — same LLM, Track A correctly invariant to environment"
+        "observed_delta_note": "Observed delta vs reference subjects is within ±0.05 — consistent with environment-invariant abstract scoring, but not a causal claim."
       },
       "B11_multi_file_mutation": {
         "this_subject": 0.91,
@@ -170,14 +170,16 @@ Pareto sweeps cost ≥5× single-point evaluation; opt-in only.
         "ref_claude_code_vanilla": 0.78,
         "ref_claude_code_full": 0.85,
         "max_pairwise_delta": 0.13,
-        "interpretation": "environment value-add is +0.13 over vanilla CLI on this dimension"
+        "observed_delta_note": "Observed delta vs vanilla CLI: +0.13. This is a divergence measurement, not an attribution claim. Identifying which identity-tuple field contributed requires controlled ablation studies (out of scope for v1)."
       }
     }
   }
 }
 ```
 
-The differential block exists only when ≥2 subjects in the run share `llm_id`. It is computed at report-generation time, not at trial time.
+**v2 note (response to R1-A W2)**: v1 used a field named `interpretation` with text like "environment value-add is +0.13," which over-claimed causal attribution. v2 renames the field to `observed_delta_note` and removes causal language. The differential block reports divergence; attribution requires controlled ablation (varying one identity field at a time, e.g., adding one skill to Subject 2 to produce Subject 2.1), which is documented as future work in limitations.md.
+
+The differential block exists only when ≥2 subjects in the run share `llm_id` AND both subjects have `single_agent_top_level: true` in their identity metadata. Multi-agent systems with matching top-level LLM IDs are excluded from automatic differential computation since their LLM ID is misleading as a comparison anchor.
 
 ---
 

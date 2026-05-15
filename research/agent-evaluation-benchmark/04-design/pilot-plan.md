@@ -23,6 +23,18 @@ And, at the run level:
 
 ## 2. Phases
 
+### Phase 0 — Hermes endpoint implementation (NEW in v2, response to R1-B #1)
+
+**Mandatory prerequisite** for evaluating any agent-system class subject (Talos, Hestia). Hermes (the framework underlying both VMs) does not currently expose the `/identity` and `/submit` endpoints the adapters depend on.
+
+Tasks:
+1. Implement `GET /identity` in Hermes returning the identity tuple per `system-identity-definition.md §1`.
+2. Implement `POST /submit` accepting `{prompt, task_id}` and returning `{output, tool_invocations, usage, trace_log}`.
+3. Standardize endpoint port (`8642`) across Talos and Hestia.
+4. Deploy to both VMs.
+
+**Estimated effort**: 1-2 days for someone with Hermes codebase access. **Phase 0 must complete before Phase 1 starts.**
+
 ### Phase 1 — Harness setup (one-time, before any pilot run)
 
 1. Build the harness: implement the SystemAdapter protocol from interface-adapter-spec.md, the four example adapters, the task generators for Track A dimensions A1, A2, A6, A7 and Track B B1 (the implementation-ready ones).
@@ -31,7 +43,7 @@ And, at the run level:
 4. Run the 3-task adapter smoke suite (interface-adapter-spec.md §7) for each of the 5 adapters.
 5. Pre-warm the 30% static held-out pool: confirm items available + uncontaminated.
 
-**Estimated effort**: 3-5 days for one engineer. Out of scope for this research document; this phase is harness implementation.
+**Estimated effort** (v2 — revised per R1-B #4): 2-4 weeks for one engineer, 1-2 weeks for a pair. The v1 estimate of 3-5 days only covered adapter wiring + smoke suite; it missed the generator implementation work (A1 grid puzzle generator, B1 synthetic filesystem generator, the scoring engine with 3-judge median, the variance tracker). Reusing existing benchmarks (Aider, SWE-bench Live, MLE-Bench-Lite) for some Track B dimensions reduces but does not eliminate this work. Out of scope for this research document; this phase is harness implementation.
 
 ### Phase 2 — Dry-run (validation-only, no scoring)
 
@@ -89,7 +101,11 @@ Approximate trial count: 14 dimensions × 4 non-bare subjects = 56 trials (with 
 
 ## 3. Pilot acceptance criteria
 
-A pilot is **PASSED** when:
+v2 introduces **two pilot tiers** (response to R1-A W13 and R1-B #2):
+
+### Smoke pilot (N=1 trial per dimension)
+
+Used to validate harness end-to-end. NO variance reported. Status field on all dimensions is `"smoke_only"`. Smoke acceptance:
 
 | Criterion | Required value |
 |-----------|---------------|
@@ -99,8 +115,30 @@ A pilot is **PASSED** when:
 | Bare-LLM Subject 1 correctly produces N/A on ≥10 of 14 Track B dimensions | yes |
 | Differential block populated for at least one Claude Opus 4.7 pair | yes |
 | Comparative report generated and human-readable | yes |
-| Total pilot wall-clock | < 12h |
-| Total pilot cost | < $200 USD |
+| Total smoke pilot wall-clock | < 12h |
+| Total smoke pilot cost | < $60 USD |
+
+### Full pilot (N=5 trials per dimension)
+
+Used as the proper v1 evaluation. Variance reported per dimension. Full acceptance:
+
+| Criterion | Required value |
+|-----------|---------------|
+| Smoke pilot passed (prerequisite) | yes |
+| Track A and B run N=5 trials per dimension per subject | yes |
+| Variance reported per dimension; stddev meets target per scoring.md §2.1 | yes |
+| Differential block populated with full N=5 numbers | yes |
+| Test-retest reliability run (per scoring.md §2.3) ≥ 24h after first session | yes |
+| Total full pilot wall-clock | < 48h (split across days OK) |
+| Total full pilot cost | < $400 USD |
+
+**Cost breakdown (full pilot, per R1-B cost audit)**:
+- Track A subject trials: $15-30
+- Track B subject trials: $50-150
+- Judge panel calls (~325 judged trials × $0.22): $70-100
+- System-prompt overhead (Subject 3): $5-15
+- Buffer / retries / smoke: $15-30
+- **Total realistic: $155-325**; we budget $400 for safety.
 
 A pilot is **FAILED** when any of:
 - An adapter cannot pass smoke suite (interface issue; not a framework bug).

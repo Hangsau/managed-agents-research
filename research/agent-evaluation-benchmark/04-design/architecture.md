@@ -10,7 +10,7 @@ The framework produces a **multi-track capability profile** with explicit constr
 
 | Track | What it measures | What it does NOT claim |
 |-------|-----------------|------------------------|
-| **A — Abstract** | Fluid reasoning + linguistic competence + knowledge recall of the LLM-as-deployed, isolated from environment confounds where possible. | Does not measure "raw" or "pre-RLHF" model intelligence. The system as deployed includes its instruction layer; we measure that. |
+| **A — Abstract** (v2 — wording revised per R1-A W1) | Abstract capability of the deployed system, including any environment augmentation the system applies to abstract-style prompts. Track A scores reflect the system's output on abstract prompts; they are NOT a measure of the underlying LLM's raw reasoning capability stripped of environment scaffolding. | Does not measure "raw" or "pre-RLHF" model intelligence. The system as deployed includes its instruction layer + auto-triggered scaffolding (e.g., CoT-injection skills, memory retrieval) — we measure that combined output. |
 | **B — Applied** | Applied agentic capability under the system's available environment affordance. The capability of the system as deployed — explicitly inclusive of MCP, skills, tools, memory, runtime. | Does not separate "what the LLM contributed" from "what the environment contributed." Use same-LLM-different-env pilot subjects (1, 2, 3) to isolate environment value-add via differential. |
 | **C — Operational** | Cost, latency, reliability, adapter ergonomics, failure-mode profile — the operating point at which capability is delivered. | Does not normalize cost by capability. We report both, the user weighs them. |
 

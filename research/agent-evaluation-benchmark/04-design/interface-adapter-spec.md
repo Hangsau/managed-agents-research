@@ -142,13 +142,19 @@ class ClaudeCodeCLIAdapter:
         }
 
     def submit(self, task) -> "Trace":
+        """v2 fix (response to R1-B #3): prompt is passed via either argv OR stdin,
+        never both. v1 had a silent double-pass bug when prompt length > 8000."""
         start = time.monotonic()
+        use_stdin = len(task.prompt) > 8000
+        cmd = [self._claude, "-p", "--model", self._model,
+               "--permission-mode", "bypassPermissions"]
+        if not use_stdin:
+            cmd.insert(2, task.prompt)  # pass as argv positional
         proc = subprocess.run(
-            [self._claude, "-p", task.prompt, "--model", self._model,
-             "--permission-mode", "bypassPermissions"],
+            cmd,
             cwd=task.workspace.path if task.workspace else self._workdir,
             capture_output=True, text=True, timeout=task.timeout_s,
-            input=task.prompt if len(task.prompt) > 8000 else None,
+            input=task.prompt if use_stdin else None,
         )
         return Trace(
             output=proc.stdout,
@@ -184,16 +190,19 @@ class TalosVMAdapter:
         self._identity_cache = None
 
     def identity(self) -> dict:
-        if self._identity_cache is None:
-            self._identity_cache = self._query_remote_identity()
-        return self._identity_cache
+        """v2 fix (response to R1-B #7): always re-query, no caching.
+        Talos can self-modify (Hermes is an active framework); cached
+        identity hides drift. Matches Hestia adapter's pattern."""
+        return self._query_remote_identity()
 
     def _query_remote_identity(self):
-        # /identity is a Hermes endpoint we standardize on
+        """v2 fix (response to R1-B #7, #8): always re-query (no cache); add timeout."""
         result = subprocess.check_output(
-            ["ssh", f"{self._ssh_user}@{self._ssh_host}",
-             "curl", "-s", "http://localhost:8642/identity"],
-            text=True,
+            ["ssh", "-o", "ConnectTimeout=10",
+             f"{self._ssh_user}@{self._ssh_host}",
+             "curl", "-s", "--max-time", "10",
+             "http://localhost:8642/identity"],
+            text=True, timeout=30,
         )
         return json.loads(result)
 

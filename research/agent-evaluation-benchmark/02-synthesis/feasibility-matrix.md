@@ -95,7 +95,7 @@ These are not "capabilities" in the construct sense — they are operating-point
 4. **Operational axes (Track C) are the only fully comparable axes across all three system classes** — they are the "tying ribbon" that lets us produce a single profile graphic with BL / CLI / AS overlaid.
 
 5. **N/A vs 0 is design-critical**:
-   - 16 of 14 Track B rows are N/A for BL (only B7, B9 have non-N/A workarounds)
+   - 12 of 14 Track B rows are N/A for BL (only B7 and B9 have non-N/A workarounds)
    - 3 of 14 Track B rows are N/A even for CLI (B6, B10, B13)
    - Any scoring that averages these as "0" will systematically rank bare LLM and CLI below agent system on a meaningless axis — environment richness, not capability.
 

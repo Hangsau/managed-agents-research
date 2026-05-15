@@ -70,14 +70,48 @@ The intermediary stack between the harness adapter and the LLM provider. Require
 
 **Detection rule for opaque subjects**: For CLI subjects, gateway is usually discoverable from environment variables or config (`ANTHROPIC_API_BASE`, `OPENAI_API_BASE`). For agent systems, gateway should be self-reported via a `/identity` query the adapter sends as a setup step. If subject cannot self-report, value is `"undisclosed"` and a warning surfaces on the profile.
 
-### 2.4 `instruction_layer_hash`
+### 2.4 `instruction_layer_hash` (v2 — tightened spec)
 
-SHA-256 of the canonicalized full system prompt seen by the LLM at task time. This includes:
-- Vendor's default system prompt (if any)
-- Operator-supplied system prompt (CLAUDE.md, custom system prompt argument)
-- Per-task prompts injected by the agent framework (Hermes preludes, etc.)
+SHA-256 over a **strictly bounded set** of inputs:
 
-For systems that don't expose the full prompt, the hash is computed over what the adapter can observe (operator-supplied + per-task), and a flag `instruction_partial: true` is set.
+**INCLUDED** in the hash:
+- Operator-supplied `CLAUDE.md` files at standard locations (`~/.claude/CLAUDE.md`, project-root `CLAUDE.md`); concatenated in canonical order before hashing
+- Custom system-prompt arguments passed to the adapter at instantiation time
+- The explicit content of `~/.claude/skills/_index.md` (skill enumeration)
+- The list of MCP server names + their declared tool schemas (NOT the MCP servers' implementations)
+
+**EXCLUDED** from the hash:
+- Vendor-default system prompts (NOT publicly documented; would make cross-operator reproducibility impossible)
+- Per-task user prompts (the prompt the harness sends for a specific task — this is per-task content, not identity)
+- Dynamically injected memory content (e.g., `~/.claude/projects/.../memory/` retrievals at session start)
+- Any context the LLM API itself prepends server-side
+
+**Rationale (response to R1-A W3)**: v1 spec included vendor defaults and per-task prompts, which were respectively (a) unknowable and (b) per-task variable — both of which broke the hash's purpose. v2 restricts to what the adapter can directly read from disk + what is statically declared.
+
+**Reference implementation**:
+
+```python
+def compute_instruction_layer_hash(adapter_observable: dict) -> str:
+    """
+    adapter_observable = {
+        "global_claude_md": str,        # ~/.claude/CLAUDE.md content, "" if absent
+        "project_claude_md": str,       # project-root CLAUDE.md content, "" if absent
+        "custom_system_prompt": str,    # adapter-supplied argument, "" if absent
+        "skill_index": list[str],       # sorted skill names
+        "mcp_servers": list[dict],      # sorted: {"name": str, "tools": list[str]}
+    }
+    """
+    canonical = json.dumps({
+        "global_claude_md": adapter_observable["global_claude_md"],
+        "project_claude_md": adapter_observable["project_claude_md"],
+        "custom_system_prompt": adapter_observable["custom_system_prompt"],
+        "skill_index": sorted(adapter_observable["skill_index"]),
+        "mcp_servers": sorted(adapter_observable["mcp_servers"], key=lambda x: x["name"]),
+    }, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+```
+
+**`instruction_partial: true` flag** (when the adapter cannot read one of the INCLUDED items, e.g., a Hermes-internal prelude that isn't disk-accessible): the hash is still computed over what is readable, but the flag is set. Profiles with `instruction_partial: true` are marked "non-comparable across operators" in the metadata block — their hashes are only meaningful for tracking change within a single operator's runs.
 
 ### 2.5 `mcp_set`
 

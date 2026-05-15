@@ -90,7 +90,22 @@ Now answer these short questions (do not modify the variables):
 Now: What is the final value of x4?
 ```
 
-Oracle: deterministic simulation of instructions yields x4 = -10 (5 → 6, 3 → 6, 11, -11, -10, x4=-20). Score = 1.0 if exact match, 0.0 otherwise.
+Oracle: deterministic simulation of instructions yields **x4 = -22**.
+
+Step-by-step trace:
+- step 1: x1 = 5
+- step 2: x2 = 3
+- step 3: x1 = 6 (incremented)
+- step 4: x2 = 6 (doubled)
+- step 5: x3 = 12 (x1 + x2 = 6 + 6)
+- step 6: x3 = -12 (negated)
+- step 7: x3 = -11 (incremented)
+- step 8: x4 = -22 (x3 * 2 = -11 * 2)
+- step 9-12 modify x5 and x2; do not affect x4.
+
+Score = 1.0 if subject's answer is exactly -22, 0.0 otherwise.
+
+**v2 note**: v1 documented this oracle as -10 with a partially-correct trace ending at -20. Both values were arithmetic errors; the correct answer is **-22**. Implementation-ready generators in v2 must include test vectors (deterministic seed + expected oracle answer) to prevent this category of error.
 
 **Scoring**: Objective oracle. Score = exact-match.
 

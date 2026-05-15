@@ -56,7 +56,7 @@
 }
 ```
 
-**Setup**: Fresh install of claude-code; no CLAUDE.md; no MCP servers connected; no skills installed; default permission mode (not bypassPermissions for safety check, but adapter will switch as needed). The framework executes in a freshly created temp working directory.
+**Setup** (v2 — permission mode resolved per R1-B #18): Fresh install of claude-code; no CLAUDE.md; no MCP servers connected; no skills installed; **permission mode = `bypassPermissions` uniformly across all subjects** to keep permission state constant across the differential trio. The framework executes in a freshly created temp working directory.
 
 **Predicted profile**: Track A scores close to Subject 1 (within ±0.05); Track B B1 / B6 / B9 / B11 measurable; cost per task slightly higher (token overhead of CLI scaffolding); Track C C4 adapter ~45 LOC.
 
@@ -168,14 +168,14 @@
 
 **Display name**: `hestia`
 
-**Identity snapshot**:
+**Identity snapshot** (v2 — TBD fields resolved per R1-B #17):
 
 ```json
 {
-  "llm_id": "<TBD-from-hermes-config>",
+  "llm_id": "deepseek-v3",
   "training_state": "instruction-tuned",
-  "gateway": "<TBD-likely opencode-go or deepseek-direct>",
-  "instruction_layer_hash": "sha256:<from-hestia-soul.md>",
+  "gateway": "deepseek-api-direct",
+  "instruction_layer_hash": "sha256:<from-hestia-SOUL.md>",
   "mcp_set": ["filesystem@hermes-builtin"],
   "skill_set": ["...self-built skills..."],
   "tool_inventory": ["bash", "file_read", "file_write", "git_op", "self_cron_mutation"],
