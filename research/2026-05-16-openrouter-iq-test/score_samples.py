@@ -160,16 +160,20 @@ def main():
         print(f"  [{prov:10s}] {m[:48]:50s} {mean:.2f}  (n={n})")
 
     # Cross-provider drift (same model on both)
+    # Normalize model ID: strip :free suffix for comparison
     print("\n=== Cross-Provider Drift (shared models) ===")
+    def norm_model(m):
+        return m.removesuffix(":free")
+
     by_model_prov = defaultdict(lambda: defaultdict(list))
     for (prov, m), all_scores in per_model.items():
-        by_model_prov[m][prov] = all_scores
-    for m, by_prov in by_model_prov.items():
+        by_model_prov[norm_model(m)][prov] = all_scores
+    for m_norm, by_prov in sorted(by_model_prov.items()):
         if len(by_prov) == 2:
             or_s = by_prov["openrouter"]; nv_s = by_prov["nvidia"]
             or_mean = sum(or_s)/len(or_s); nv_mean = sum(nv_s)/len(nv_s)
             delta = nv_mean - or_mean
-            print(f"  {m[:48]:50s} OR={or_mean:.2f} (n={len(or_s)})  NV={nv_mean:.2f} (n={len(nv_s)})  Δ={delta:+.2f}")
+            print(f"  {m_norm[:48]:50s} OR={or_mean:.2f} (n={len(or_s)})  NV={nv_mean:.2f} (n={len(nv_s)})  Δ={delta:+.2f}")
 
 if __name__ == "__main__":
     main()
