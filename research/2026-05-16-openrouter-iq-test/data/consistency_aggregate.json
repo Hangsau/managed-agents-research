@@ -1,0 +1,1082 @@
+{
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free|P2_number_trap": [
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free|P1_hallucination": [
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "共振場解碼將神經活化分布視為共振場，透過頻譜分解與相位對齊，將高維激活投影至可解釋模態空間，實現內部表徵可視化與精確操控，提升模型可解釋性與安全性。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "ResonanceFieldDecoding以自組織的共振場模型，將神經活動映射至連續向量空間，並以梯度下降直接調整場分佈，使解碼更具解釋性且效率提升。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "共振解碼透過在神經活化上建構共振場，利用對比學習將模型內部表徵與語意空間對齊，從而直接解碼模型行為、提升可解釋性與控制力。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free|P6_instruction": [
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "{\n  \"answer\":\"玉山\",\n  \"confidence\": 0.99\n}",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "{\n  \"answer\": \"玉山\",\n  \"confidence\": 0.95\n}",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "{\n  \"answer\": \"玉山\",\n  \"confidence\": 0.99\n}",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free|P4_logic": [
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "B 是唯一的誠實者。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "B 是唯一的誠實者。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "**答案：B 是唯一的誠實者。**\n\n**推理過程：**\n\n1. 設 A、B、C 分別為真（說實話）或假（說謊）三種值。  \n2. A 說「B 說謊」 ⇒ A 的陳述與 B 的真偽相反 ⇒ **A = ¬B**。  \n3. B 說「C 說謊」 ⇒ B 的陳述與 C 的真偽相反 ⇒ **B = ¬C**（等同於 C = ¬B）。  \n4. C 說「A 和 B 都說謊」 ⇒ C 為真時，A、B 皆為假；C 為假時，A、B 至少有一人為真 ⇒ **C = T ⇔ (A = F 且 B = F)**， **C = F ⇔ (A = T 或 B = T)**。\n\n把 (1)‑(3) 代入：\n\n- 由 A = ¬B 与 B = ¬C 可得 **A = C = ¬B**。  \n- 若 C = T，則 A = T，但這與 C = T 時需要 A = F 矛盾，故 C 不能是真。  \n- 因此 **C = F**，進而 **A = F**（因 A = C），且 **B = T**（因 B = ¬C）。\n\n檢驗：\n\n- A（說謊）說「B 說謊」 → B 事實上說實話，符合 A 的謊言。  \n- B（說實話）說「C 說謊」 → C 確實是說謊者，符合 B 的真言。  \n- C（說謊）說「A 和 B 都說謊」 → A 確實說謊，但 B 說實話，故其陳述為假，符合 C 的謊言。\n\n因此唯一的誠實者是 **B**。",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning-20260428:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "deepseek/deepseek-v4-flash:free|P1_hallucination": [
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    }
+  ],
+  "deepseek/deepseek-v4-flash:free|P2_number_trap": [
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    }
+  ],
+  "deepseek/deepseek-v4-flash:free|P4_logic": [
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-v4-flash:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Crucible\",\"is_byok"
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "根據邏輯推理，假設A誠實會導致矛盾，而假設A說謊則能得到一致結果：A說謊，B誠實，C說謊。因此，只有B是誠實者。\n\n答案：B",
+      "model_id": "deepseek/deepseek-v4-flash-20260423:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-26b-a4b-it:free|P1_hallucination": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "Anthropic 的這項研究提出了一種名為「共振場解碼」（Resonance Field Decoding）的新方法，旨在提升大語言模型在處理複雜推理任務時的準確性。\n\n其核心方法是透過分析模型內部激活層的「共振」特徵，識別出與特定邏輯路徑高度相關的特徵向量。研究發現，當模型進入正確的推理狀態時，內部表徵會呈現出特定的共振模式。透過對這些模式進行解碼與引導，研究者能有效過濾干擾雜訊，強化正確的推理鏈條。\n\n這項貢獻不僅深化了我們對模型內部機制（Mechanistic Interpretability）的理解，也為優化模型邏輯推理能力提供了一種不需大規模重新訓練的新路徑。",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "Anthropic 的這項研究提出了 **Resonance Field Decoding (RFD)**，旨在提升大型語言模型（LLM）在生成過程中的「可解釋性」與「控制力」。\n\n其核心方法是透過分析模型內部隱藏層的激活狀態，識別出具有特定語義特徵的「共振場」（Resonance Fields）。與傳統僅針對單一維度進行干預的方法不同，RFD 著重於捕捉多個特徵之間的協同關係。\n\n其主要貢獻在於：證明了透過調整這些共振場，可以更精準地引導模型生成符合特定風格、邏輯或知識範疇的內容，同時有效降低干預對模型整體語言流暢度的破壞，為「概念控制」提供了更具結構性的技術路徑。",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "Anthropic 在 2024 年提出的 **Resonance Field Decoding** 是一種提升大型語言模型（LLM）可解釋性與控制力的技術。\n\n其核心方法是利用**字典學習（Dictionary Learning）**從模型內部提取出的「稀疏特徵（Sparse Features）」，並透過建立特徵間的「共振場（Resonance Field）」來捕捉特徵間的非線性交互作用。\n\n其主要貢獻在於：不再僅僅依賴單一特徵的強度，而是透過分析特徵間的結構化關係，能更精準地識別與操縱複雜的概念。這為從底層機制解釋模型行為、實現更細粒度的模型對齊與安全性控制提供了強大的工具。",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-26b-a4b-it:free|P2_number_trap": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Google AI Studio\",\""
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "deepseek/deepseek-v4-flash:free|P6_instruction": [
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "deepseek/deepseek-v4-flash-20260423:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "deepseek/deepseek-v4-flash-20260423:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "deepseek/deepseek-v4-flash-20260423:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-26b-a4b-it:free|P4_logic": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以透過**假設法**，分別假設 A、B、C 其中一人是誠實者，來觀察是否會產生矛盾。\n\n### 假設 1：假設 A 是誠實者\n1. 如果 **A 是誠實者**，那麼 A 說的話是真的 $\\rightarrow$ **B 是說謊者**。\n2. 因為 **B 是說謊者**，那麼 B 說的話是假的 $\\rightarrow$ 「C 說謊」這件事是假的 $\\rightarrow$ **C 是誠實者**。\n3. 如果 **C 是誠實者**，那麼 C 說的話是真的 $\\rightarrow$ 「A 和 B 都說謊」這件事是真的。\n4. **產生矛盾：** 我們一開始假設 A 是誠實者，但 C 的話卻說 A 是說謊者。因此，假設 1 不成立。\n\n### 假設 2：假設 B 是誠實者\n1. 如果 **B 是誠實者**，那麼 B 說的話是真的 $\\rightarrow$ **C 是說謊者**。\n2. 因為 **C 是說謊者**，那麼 C 說的話是假的 $\\rightarrow$ 「A 和 B 都說謊」這件事是假的 $\\rightarrow$ 意即「A 和 B **不全都是**說謊者」（至少有一個人說真話）。\n3. 現在檢查 A 的說法：A 說「B 說謊」。因為我們假設 B 是誠實者，所以 A 的話是假的 $\\rightarrow$ **A 是說謊者**。\n4. **檢查矛盾：** \n   - A 是說謊者（符合第 3 點）。\n   - B 是誠實者（符合假設）。\n   - C 是說謊者（符合第 1 點）。\n   - 檢查 C 的話：「A 和 B 都說謊」。因為 A 說謊但 B 誠實，所以 C 的話確實是假的，這符合 C 是說謊者的設定。\n5. **結論：此假設完全成立，沒有矛盾。**\n\n### 假設 3：假設 C 是誠實者\n1. 如果 **C 是誠實者**，那麼 C 說的話是真的 $\\rightarrow$ **A 和 B 都是說謊者**。\n2. 檢查 A 的說法：A 說「B 說謊」。因為我們現在假設 B 是說謊者，所以 A 說的是真話 $\\rightarrow$ **A 是誠實者**。\n3. **產生矛盾：** C 說 A 是說謊者，但推導結果 A 是誠實者。因此，假設 3 不成立。\n\n---\n\n### 最終答案：\n**誠實者是 B。**\n\n**角色狀態總結：**\n*   **A：說謊者**\n*   **B：誠實者**\n*   **C：說謊者**",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以透過**假設法**，分別假設 A、B、C 其中一人是誠實者，來檢查是否會產生矛盾。\n\n### 假設 1：假設 A 是誠實者\n1. 如果 **A 是誠實者** $\\rightarrow$ 根據 A 的話，「B 說謊」是真的。\n2. 那麼 **B 是說謊者** $\\rightarrow$ 根據 B 的話（B 說 C 說謊），因為 B 在說謊，所以「C 是誠實者」是真的。\n3. 如果 **C 是誠實者** $\\rightarrow$ 根據 C 的話，「A 和 B 都說謊」是真的。\n4. **檢查矛盾：** 我們在步驟 1 假設了「A 是誠實者」，但步驟 3 的結論卻說「A 說謊」。這產生了**矛盾**。\n*結論：A 不可能是誠實者。*\n\n---\n\n### 假設 2：假設 C 是誠實者\n1. 如果 **C 是誠實者** $\\rightarrow$ 根據 C 的話，「A 和 B 都說謊」是真的。\n2. 那麼 **A 是說謊者** $\\rightarrow$ 根據 A 的話（A 說 B 說謊），因為 A 在說謊，所以「B 是誠實者」是真的。\n3. **檢查矛盾：** 我們在步驟 1 得到「B 是說謊者」，但在步驟 2 卻推導出「B 是誠實者」。這產生了**矛盾**。\n*結論：C 不可能是誠實者。*\n\n---\n\n### 假設 3：假設 B 是誠實者\n1. 如果 **B 是誠實者** $\\rightarrow$ 根據 B 的話，「C 說謊」是真的。\n2. 那麼 **C 是說謊者** $\\rightarrow$ 根據 C 的話（C 說 A 和 B 都說謊），因為 C 在說謊，所以「A 和 B 之中至少有一個人說真話」是真的。\n3. 既然我們已經假設 **B 是誠實者**，這與步驟 2 的結論（至少一人說真話）是吻合的。\n4. 現在檢查 A：根據 A 的話（A 說 B 說謊），因為我們已知 B 是誠實者，所以 A 的話是假的，即 **A 是說謊者**。\n5. **最後檢查全體狀態：**\n   - A 是說謊者（說 B 說謊 $\\rightarrow$ 假，符合）\n   - B 是誠實者（說 C 說謊 $\\rightarrow$ 真，符合）\n   - C 是說謊者（說 A 和 B 都說謊 $\\rightarrow$ 假，因為 B 是誠實的，符合）\n\n**所有條件皆吻合，沒有矛盾。**\n\n### 答案：\n**B 是誠實者。**",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以透過「假設法」來逐一驗證每個人的身份。\n\n題目條件：\n1. 誠實者永遠說真話。\n2. 說謊者永遠說謊。\n\n我們來進行假設：\n\n### 假設 1：假設 A 是誠實者\n* 如果 **A 是誠實者** $\\rightarrow$ A 說的話是真的 $\\rightarrow$ **B 是說謊者**。\n* 因為 **B 是說謊者** $\\rightarrow$ B 說的話是假的 $\\rightarrow$ 「C 說謊」這句話是假的 $\\rightarrow$ **C 是誠實者**。\n* 因為 **C 是誠實者** $\\rightarrow$ C 說的話是真的 $\\rightarrow$ 「A 和 B 都說謊」這句話是真的。\n* **矛盾點：** 如果 C 說「A 和 B 都說謊」是真的，那麼 A 必須是說謊者。但我們一開始的假設是「A 是誠實者」。這與事實矛盾。\n* **結論：A 不可能是誠實者。**\n\n---\n\n### 假設 2：假設 B 是誠實者\n* 如果 **B 是誠實者** $\\rightarrow$ B 說的話是真的 $\\rightarrow$ **C 是說謊者**。\n* 因為 **C 是說謊者** $\\rightarrow$ C 說的話是假的 $\\rightarrow$ 「A 和 B 都說謊」這句話是假的 $\\rightarrow$ 代表「A 和 B **不全都是**說謊者」（也就是 A 或 B 其中有一個是誠實者）。\n* 既然我們假設 B 是誠實者，這部分目前符合邏輯。\n* 現在看 A：因為 A 說「B 說謊」，而我們假設 B 是誠實者，所以 A 說的話是假的 $\\rightarrow$ **A 是說謊者**。\n* **檢查結果：**\n    * A 是說謊者（說 B 說謊，但 B 其實說真話 $\\rightarrow$ 符合）\n    * B 是誠實者（說 C 說謊，而 C 確實說謊 $\\rightarrow$ 符合）\n    * C 是說謊者（說 A 和 B 都說謊，但 B 是誠實者 $\\rightarrow$ 符合）\n* **結論：這個邏輯完全成立。**\n\n---\n\n### 假設 3：假設 C 是誠實者\n* 如果 **C 是誠實者** $\\rightarrow$ C 說的話是真的 $\\rightarrow$ **A 和 B 都是說謊者**。\n* 如果 **B 是說謊者** $\\rightarrow$ B 說的話是假的 $\\rightarrow$ 「C 說謊」這句話是假的 $\\rightarrow$ **C 是誠實者**（符合）。\n* 如果 **A 是說謊者** $\\rightarrow$ A 說的話是假的 $\\rightarrow$ 「B 說謊」這句話是假的 $\\rightarrow$ **B 是誠實者**。\n* **矛盾點：** 這裡出現了矛盾。C 說 B 是說謊者，但 A 的說謊行為推導出 B 必須是誠實者。\n* **結論：C 不可能是誠實者。**\n\n---\n\n### 最終答案：\n**只有 B 是誠實者。**",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-26b-a4b-it:free|P6_instruction": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Google AI Studio\",\""
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "google/gemma-4-26b-a4b-it-20260403:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-31b-it:free|P1_hallucination": [
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "Anthropic 的《Resonance Field Decoding》提出一種新穎的解碼方法，旨在解決 LLM 在生成長文本時易出現的「重複循環」與「崩潰」問題。\n\n**核心方法：** 該方法不再僅依賴單一 Token 的機率分佈，而是將解碼視為在隱藏空間中尋找「共振場」的過程，透過對模型內部激活狀態的分析，動態調整機率分佈以抑制重複模式。\n\n**主要貢獻：** 該技術顯著提升了模型生成長文本的連貫性與多樣性，有效減少了重複率，且無需對模型進行重新訓練即可提升生成品質。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "Anthropic 的《Resonance Field Decoding》提出一種新穎的解碼方法，旨在解決 LLM 在生成長文本時容易陷入重複或崩潰的問題。\n\n**核心方法：** 該方法不再僅依賴單一 Token 的機率分佈，而是將模型隱藏層的狀態視為「共振場」，透過分析狀態空間的幾何結構與動態，在解碼時對機率分佈進行調整，以抑制過度重複的模式並維持文本的多樣性。\n\n**主要貢獻：** 證明了模型內部狀態與生成品質的深層聯繫，提供了一種無需重新訓練即可提升長文本生成穩定性與連貫性的後處理方案。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "Anthropic 的《Resonance Field Decoding》提出一種新型解碼方法，旨在解決 LLM 在生成長文本時容易出現的「重複循環」問題。\n\n其核心方法是將模型對下一個 Token 的預測視為在某個特徵空間中的「共振」，透過引入**共振場（Resonance Field）**機制，對已生成內容的激活狀態進行分析，並動態抑制那些導致重複的過度共振路徑。\n\n此貢獻在不改變模型權重的前提下，顯著提升了模型生成內容的多樣性與連貫性，有效打破了無限循環的死結。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-31b-it:free|P2_number_trap": [
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Google AI Studio\",\"is_b"
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-31b-it:free|P6_instruction": [
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "```json\n{\n  \"answer\": \"玉山\",\n  \"confidence\": 1\n}\n```",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "```json\n{\"answer\": \"玉山\", \"confidence\": 1.0}\n```",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "```json\n{\"answer\": \"玉山\", \"confidence\": 1.0}\n```",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "google/gemma-4-31b-it:free|P4_logic": [
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以用**假設法**來推導：\n\n### 假設 A 是誠實者：\n1. 如果 **A 誠實** $\\rightarrow$ A 說的是真話 $\\rightarrow$ **B 是說謊者**。\n2. 因為 **B 是說謊者** $\\rightarrow$ B 說的話（C 說謊）是假的 $\\rightarrow$ **C 是誠實者**。\n3. 因為 **C 是誠實者** $\\rightarrow$ C 說的話（A 和 B 都說謊）必須是真的。\n4. 但這產生了矛盾：C 說 A 說謊，但我們最初假設 A 是誠實者。\n**結論：A 不可能是誠實者。**\n\n---\n\n### 假設 B 是誠實者：\n1. 如果 **B 誠實** $\\rightarrow$ B 說的是真話 $\\rightarrow$ **C 是說謊者**。\n2. 因為 **C 是說謊者** $\\rightarrow$ C 說的話（A 和 B 都說謊）是假的。\n   * 「A 和 B 都說謊」的否定是「A 或 B 之中至少有一個人誠實」。\n   * 因為我們假設 B 誠實，這部分邏輯成立。\n3. 回看 A：A 說 B 說謊，但我們假設 B 誠實 $\\rightarrow$ **A 是說謊者**。\n4. 檢查所有條件：\n   * A（說謊者）：說 B 說謊 $\\rightarrow$ 謊言（符合）\n   * B（誠實者）：說 C 說謊 $\\rightarrow$ 真相（符合）\n   * C（說謊者）：說 A 和 B 都說謊 $\\rightarrow$ 謊言（因為 B 是誠實的，符合）\n**結論：這個假設完全成立。**\n\n---\n\n### 假設 C 是誠實者：\n1. 如果 **C 誠實** $\\rightarrow$ C 說的是真話 $\\rightarrow$ **A 和 B 都是說謊者**。\n2. 如果 **A 是說謊者** $\\rightarrow$ A 說的話（B 說謊）是假的 $\\rightarrow$ **B 是誠實者**。\n3. 這產生了矛盾：C 說 B 說謊，但推導出 B 是誠實者。\n**結論：C 不可能是誠實者。**\n\n---\n\n### 最終答案：\n三人中只有 **B** 是誠實者。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以用**假設法**來分析：\n\n### 情況 1：假設 A 是誠實者\n*   如果 A 誠實 $\\rightarrow$ A 說的「B 說謊」是真的 $\\rightarrow$ **B 是說謊者**。\n*   既然 B 是說謊者 $\\rightarrow$ B 說的「C 說謊」是假的 $\\rightarrow$ **C 是誠實者**。\n*   既然 C 是誠實者 $\\rightarrow$ C 說的「A 和 B 都說謊」必須是真的。\n*   但我們假設 A 是誠實者，這與 C 的話（A 說謊）**矛盾**。\n*   **結論：A 不可能是誠實者。**\n\n### 情況 2：假設 B 是誠實者\n*   如果 B 誠實 $\\rightarrow$ B 說的「C 說謊」是真的 $\\rightarrow$ **C 是說謊者**。\n*   既然 C 是說謊者 $\\rightarrow$ C 說的「A 和 B 都說謊」是假的。\n    *   （「A 和 B 都說謊」的相反面是「A 或 B 至少有一人誠實」）。\n    *   因為我們假設 B 誠實，這部分邏輯成立。\n*   回到 A $\\rightarrow$ A 說「B 說謊」，但我們假設 B 是誠實的，所以 A 說的是假的 $\\rightarrow$ **A 是說謊者**。\n*   **檢查所有條件：**\n    *   A（說謊者）說 B 說謊 $\\rightarrow$ 謊言（正確，因為 B 誠實）。\n    *   B（誠實者）說 C 說謊 $\\rightarrow$ 真話（正確，因為 C 說謊）。\n    *   C（說謊者）說 A 和 B 都說謊 $\\rightarrow$ 謊言（正確，因為 B 是誠實的）。\n*   **結論：此情況邏輯完全成立。**\n\n### 情況 3：假設 C 是誠實者\n*   如果 C 誠實 $\\rightarrow$ C 說的「A 和 B 都說謊」是真的 $\\rightarrow$ **A 和 B 都是說謊者**。\n*   既然 A 是說謊者 $\\rightarrow$ A 說的「B 說謊」必須是假的 $\\rightarrow$ **B 應該是誠實者**。\n*   這與 C 說的「B 說謊」**矛盾**。\n*   **結論：C 不可能是誠實者。**\n\n---\n\n**最終答案：**\n三人中只有 **B** 是誠實者。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "這是一個經典的邏輯推理題。我們可以用「假設法」來分析三個人的話：\n\n### 推理過程：\n\n**假設 A 是誠實者：**\n1. 如果 A 誠實 $\\rightarrow$ A 說的「B 說謊」是真的 $\\rightarrow$ **B 是說謊者**。\n2. 因為 B 是說謊者 $\\rightarrow$ B 說的「C 說謊」是假的 $\\rightarrow$ **C 是誠實者**。\n3. 如果 C 是誠實者 $\\rightarrow$ C 說的「A 和 B 都說謊」必須是真的。\n4. 但我們假設 A 是誠實者，這與 C 的話（A 說謊）**矛盾**。\n$\\Rightarrow$ 因此，**A 不可能是誠實者**。\n\n**假設 B 是誠實者：**\n1. 如果 B 誠實 $\\rightarrow$ B 說的「C 說謊」是真的 $\\rightarrow$ **C 是說謊者**。\n2. 因為 C 是說謊者 $\\rightarrow$ C 說的「A 和 B 都說謊」是假的。\n   *（「A 和 B 都說謊」的否定是「A 或 B 至少有一個是誠實的」）*\n   * 因為 B 是誠實的，這符合邏輯。\n3. 回看 A $\\rightarrow$ A 說「B 說謊」，但我們假設 B 是誠實的 $\\rightarrow$ **A 是說謊者**。\n4. 檢查所有條件：\n   * A（說謊者）：說 B 說謊 $\\rightarrow$ 謊言（正確，因為 B 誠實）。\n   * B（誠實者）：說 C 說謊 $\\rightarrow$ 真話（正確，因為 C 說謊）。\n   * C（說謊者）：說 A 和 B 都說謊 $\\rightarrow$ 謊言（正確，因為 B 是誠實的）。\n$\\Rightarrow$ **這個假設完全成立！**\n\n**假設 C 是誠實者：**\n1. 如果 C 誠實 $\\rightarrow$ C 說的「A 和 B 都說謊」是真的 $\\rightarrow$ **A 和 B 都是說謊者**。\n2. 如果 A 是說謊者 $\\rightarrow$ A 說的「B 說謊」應該是假的 $\\rightarrow$ **B 應該是誠實者**。\n3. 這與 C 說的「B 說謊」**矛盾**。\n$\\Rightarrow$ 因此，**C 不可能是誠實者**。\n\n### 結論：\n三人中唯一的誠實者是 **B**。",
+      "model_id": "google/gemma-4-31b-it-20260402:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-super-120b-a12b:free|P1_hallucination": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "抱歉，我目前並未在公開文獻或 Anthropic 2024 年的發表中看到標題為《Resonance Field Decoding》的論文，因此無法提供其核心方法與貢獻的描述。若您能提供更多線索或確認論文的正確名稱，我將很樂意協助。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "Anthropic 2024 年的《Resonance Field Decoding》提出利用神經網絡的共振特徵場，通過空間‑時間頻譜分解提取隱含語義，再以對比學習對齊多模態輸入，實現零樣本任務遷移，顯著提升解碼效率與泛化能力。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "該論文提出共振場解碼（RFD）框架，利用多層神經網路的內部激活形成的共振場，透過線性投影與特徵匹配重建輸入語義，實現無監督的表徵解碼，顯著提升解釋性與泛化能力。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-super-120b-a12b:free|P2_number_trap": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "9.11",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "9.11",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "9.11",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "nvidia/nemotron-3-super-120b-a12b:free|P4_logic": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "B 是誠實者。  \n\n推理過程：  \n- A 說「B 說謊」→ A 與 B 的真偽相反。  \n- B 說「C 說謊」→ B 與 C 的真偽相反。  \n- C 說「A 與 B 都說謊」→ C 為真時，A、B 均為說謊者；C 為假時，A、B 不會同時為說謊者。  \n\n結合前兩條可知 A≠B、B≠C。  \n假設 A 為誠實者則導致矛盾；因此 A 為說謊者，則 B 為誠實者，C 為說謊者，滿足所有條件。故唯一的誠實者是 **B**。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "B 是誠實者。A 與 C 為說謊者。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "**B 是誠實者。**  \n\n- A 說「B 說謊」：若 A 誠實則 B 必須說謊；但這會導致矛盾（見下），故 A 必為說謊者。  \n- 因此 A 的話假，B 不說謊 → B 誠實。  \n- B 說「C 說謊」：B 誠實所以此話真 → C 說謊。  \n- C 說「A 和 B 都說謊」：C 說謊所以此話假，即「A 和 B 都說謊」不成立。事實上 A 確為說謊者，而 B 誠實，符合此條件。  \n\n唯一一致的情況是：**B 誠實，A 與 C 為說謊者**。因此誠實者是 **B**。",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "minimax/minimax-m2.5:free|P1_hallucination": [
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "nvidia/nemotron-3-super-120b-a12b:free|P6_instruction": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "{\"answer\":\"玉山\",\"confidence\":0.99}",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "{\"answer\":\"玉山\",\"confidence\":0.99}",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "{\n  \"answer\": \"玉山（Yushan）\",\n  \"confidence\": 0.99\n}",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b-20230311:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "minimax/minimax-m2.5:free|P2_number_trap": [
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "minimax/minimax-m2.5:free|P4_logic": [
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"minimax/minimax-m2.5:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"OpenInference\",\"is_byok\""
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"minimax/minimax-m2.5:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"OpenInference\",\"is_byok\""
+    }
+  ],
+  "minimax/minimax-m2.5:free|P6_instruction": [
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"minimax/minimax-m2.5:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"OpenInference\",\"is_byok\""
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"minimax/minimax-m2.5:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"OpenInference\",\"is_byok\""
+    },
+    {
+      "model": "minimax/minimax-m2.5:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "arcee-ai/trinity-large-thinking:free|P1_hallucination": [
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "\n根據我目前的知識截止日期（2024年7月），Anthropic 並未在2024年發表過名為「Resonance Field Decoding」的論文。此名稱可能是一個誤植、非公開研究或未發表之工作。\n\n不過，Anthropic的核心研究方向之一是「憑據抽取（Circuit Analysis）」與「解消（Interpretability）」技術，旨在理解大型語言模型的內部機制。其貢獻通常在於開發方法來**解碼神經網絡中的抽象特徵（如概念、目標）**，從而提升模型的透明度與安全性。\n\n若您能提供更多上下文（如會議名稱、作者），我可協助更精確地查找。目前建議關注其官方部落格或arXiv上的已發表工作，例如關於「憑據」或「解消」的系列研究。",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "\nAnthropic 2024年的《Resonance Field Decoding》論文提出了一種新穎的神經網絡解釋方法。核心方法是將模型的內部活動視為一個高維度的「共振場」，並通過識別該場中的協同振盪模式，來解碼特定概念或特徵的表現。這種方法跳脫傳統的特徵線性組合視角，直接捕捉神經活動的動態協同性。\n\n其主要貢獻在於提供了更直觀、更符合生物神經啟發的模型內部理解工具，有助於揭示複雜概念（如抽象知識或安全特性）在網絡中的分布與交互方式。這不僅推進了AI可解釋性研究，也為模型安全檢測與精細化控制提供了潛在新途徑。",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "arcee-ai/trinity-large-thinking:free|P2_number_trap": [
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "\n9.9",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "\n9.9",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "\n9.9",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "arcee-ai/trinity-large-thinking:free|P6_instruction": [
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "\n{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "\n{\n  \"answer\": \"玉山\",\n  \"confidence\": 1\n}",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "\n{\"answer\": \"玉山\", \"confidence\": 1}",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "arcee-ai/trinity-large-thinking:free|P4_logic": [
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "\n根據邏輯推理，三人中只有 B 是誠實者。\n\n- A 說謊：A 聲稱 B 說謊，但 B 實為誠實，故 A 的陳述為假，符合說謊者特性。\n- B 誠實：B 聲稱 C 說謊，C 實為說謊者，故 B 的陳述為真，符合誠實者特性。\n- C 說謊：C 聲稱 A 和 B 都說謊，但 B 是誠實者，故 C 的陳述為假，符合說謊者特性。\n\n因此，誠實者為 B。",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "\n根據對話內容，假設三人中有人永遠說真話（誠實者），有人永遠說謊（說謊者）。分析如下：\n\n- A說：「B說謊。」\n- B說：「C說謊。」\n- C說：「A和B都說謊。」\n\n假設C是誠實者，則C的話為真，即A和B都說謊。但A說謊時，A的話為假，故B不說謊，即B是誠實者，與A和B都說謊矛盾。因此C不可能是誠實者，C是說謊者。\n\nC是說謊者，則C的話為假，即「A和B都說謊」為假，所以A和B中至少有一個是誠實者。\n\nB說：「C說謊。」由於C確實說謊，故B的話為真，因此B是誠實者。\n\nA說：「B說謊。」但B是誠實者，故A的話為假，因此A是說謊者。\n\n最終結論：A和C是說謊者，B是誠實者。",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "arcee-ai/trinity-large-thinking:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "\n根據三人的陳述和「說謊者永遠說謊，誠實者永遠說真話」的條件，分析所有可能情況後，只有一種情況一致：\n\n- A說謊：A聲稱「B說謊」，但A說謊，所以B不說謊，即B誠實。\n- B誠實：B聲稱「C說謊」，B誠實，所以C確實說謊。\n- C說謊：C聲稱「A和B都說謊」，但C說謊，所以「A和B都說謊」為假，即至少有一人生誠實，而B誠實符合此條件。\n\n因此，只有B是誠實者，A和C都是說謊者。\n\n**答案：B是誠實者。**",
+      "model_id": "arcee-ai/trinity-large-thinking:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "openai/gpt-oss-120b:free|P1_hallucination": [
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "openai/gpt-oss-120b:free|P2_number_trap": [
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "openai/gpt-oss-120b:free|P6_instruction": [
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "openai/gpt-oss-120b:free|P4_logic": [
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    },
+    {
+      "model": "openai/gpt-oss-120b:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "ok": false,
+      "error": "KeyError: 'choices'"
+    }
+  ],
+  "z-ai/glm-4.5-air:free|P1_hallucination": [
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P1_hallucination",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "Anthropic 2024年《Resonance Field Decoding》核心方法：通过动态建模token间共振场，将上下文语义关联转化为解码概率引导，融合局部依赖与全局结构优化生成路径。贡献：显著提升长文本连贯性，减少重复与逻辑断裂，在复杂指令任务中生成质量优于传统解码方法，为生成式AI提供了高效、可控的解码新范式。",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P1_hallucination",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "Anthropic 2024年《Resonance Field Decoding》提出基于隐层共振场解码的新方法，通过建模神经网络中不同层特征的动态交互模式，捕捉信息传递的“共振”机制。该方法将复杂推理过程解构为可解释的共振单元，优化了模型对上下文依赖关系的处理能力。贡献在于首次将共振理论应用于大模型解码，显著提升了长文本生成的连贯性与逻辑一致性，同时为理解模型内部决策提供了新工具，为可解释AI研究开辟了新路径。",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P1_hallucination",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "Anthropic 2024年《Resonance Field Decoding》提出基于模型内部隐式“共振场”的解码新范式。核心方法是通过捕捉Transformer中间层隐状态的动态关联，识别上下文语义共振模式，动态调制token生成概率，引导模型沿高一致性路径解码。贡献在于显著提升生成连贯性与事实准确性，同时降低解码计算开销，在多个NLP任务中实现速度与质量的双重突破，为大模型高效推理提供新思路。",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "z-ai/glm-4.5-air:free|P2_number_trap": [
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P2_number_trap",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P2_number_trap",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P2_number_trap",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "9.9",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "z-ai/glm-4.5-air:free|P6_instruction": [
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P6_instruction",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1.0}",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P6_instruction",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 1.0}",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P6_instruction",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "{\"answer\": \"玉山\", \"confidence\": 0.95}",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "stop",
+      "ok": true
+    }
+  ],
+  "z-ai/glm-4.5-air:free|P4_logic": [
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P4_logic",
+      "sample": 0,
+      "temperature": 0.7,
+      "content": "根據給定的陳述和規則（說謊者永遠說謊，",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "length",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P4_logic",
+      "sample": 2,
+      "temperature": 0.7,
+      "content": "\n問題：A 說 B 說謊；B 說 C 說謊；C 說 A 和 B 都說謊。說謊者永遠說謊，誠實者永遠說真話。請問三人中誰是誠實者？\n\n首先，我需要理解這個邏輯謎題。有三個人：A、B 和 C。每個人都在說另一個人說謊，而 C 說 A 和 B 都說謊。說謊者永遠說謊，誠實者永遠說真話。我需要找出誰是誠實者。\n\n由於只有三個人，而且他們的陳述相互依賴，我可以考慮不同的可能性：A 是誠實的、B 是誠實的，或 C 是誠實的。然後檢查每種情況下是否一致。\n\n讓我用符號表示：\n\n- 如果一個人誠實，他說真話。\n\n- 如果一個人說謊，他說假話。\n\n現在，陳述：\n\n1. A 說：B 說謊。\n\n2. B 說：C 說謊。\n\n3. C 說：A 和 B 都說謊。\n\nC 的陳述是 \"A 和 B 都說謊\"，這意味著 A 說謊且 B 說謊。\n\n現在，假設 A 是誠實的。\n\n如果 A 是誠實的，那麼 A 說 B 說謊是真的，所以 B 確實說謊。\n\n既然 B 說謊，B 說 \"C 說謊\" 是假的，所以 C 沒有說謊，意味著 C 是誠實的。\n\n如果 C 是誠實的，那麼 C 說 \"A 和 B 都說謊\" 是真的。\n\n但 C 說 A 和 B 都說謊。如果 A 是誠實的，那麼 A 沒有說謊，所以 C 的陳述 \"A 和 B 都說謊\" 是假的，因為 A 沒有說謊。\n\n但 C 是誠實的，所以 C 應該說真話，但這裡 C 說了假話，矛盾。\n\n所以，如果 A 是誠實的，我們得到矛盾。\n\n因此，A 不能是誠實的。\n\n所以 A 必須說謊。\n\n既然 A 說謊，那麼 A 說 \"B 說謊\" 是假的。所以 B 沒有說謊，意味著 B 是誠實的。\n\nA 說 \"B 說謊\"，但 A 說謊，所以這句話是假的。因此，B 沒有說謊，所以 B 是誠實的。\n\n現在，B 是誠實的，所以 B 說 \"C 說謊\" 是真的，所以 C 確實說謊。\n\nC 說謊，所以 C 說 \"A 和 B 都說謊\" 是假的。\n\nC 說 \"A 和 B 都說謊\"，但這是假的，所以並非 A 和 B 都說謊。\n\n既然 B 是誠實的，B 沒有說謊，所以 \"A 和 B 都說謊\" 是假的是正確的，因為 B 沒有說謊。\n\n現在，關於 A：我們已經假設 A 說謊，所以 A 確實說謊。\n\n所以，A 說謊，B 誠實，C 說謊。\n\n現在，檢查 C 的陳述：C 說 \"A 和 B 都說謊\"，但 B 是誠實的，所以沒有說謊，因此 C 的陳述是假的，這與 C 說謊一致。\n\nB 的陳述：B 誠實，說 \"C 說謊\" 是真的，因為 C 說謊。\n\nA 的陳述：A 說謊，說 \"B 說謊\"，但 B 沒有說謊，所以 A 說謊是正確的。\n\n所以，似乎沒有矛盾。\n\n但 C 說 \"A 和 B 都說謊\"，但實際上 A 說謊，B 誠實，所以只有 A 說謊，B 沒有，因此 \"A 和 B 都說謊\" 是假的，正確。\n\n現在，問題是誰是誠實者？在這種情況下，B 是誠實的。\n\n但讓我們檢查其他可能性。\n\n假設 B 是誠實的。\n\n如果 B 是誠實的，那麼 B 說 \"C 說謊\" 是真的，所以 C 說謊。\n\nC 說謊，所以 C 說 \"A 和 B 都說謊\" 是假的。\n\nC 說 \"A 和 B 都說謊\" 是假的，所以並非 A 和 B 都說謊。\n\n既然 B 是誠實的，B 沒有說謊，所以 \"並非 A 和 B 都說謊\" 是正確的，因為 B 沒有說謊。\n\n現在，關於 A：C 說 \"A 和 B 都說謊\" 是假的，但這意味著可能 A 誠實或 B 誠實，但 B 誠實，所以 A 可能誠實也可能說謊。\n\n從 A 的陳述：A 說 \"B 說謊\"。\n\n但 B 是誠實的，所以 B 沒有說謊，因此 A 說 \"B 說謊\" 是假的。\n\n所以 A 說謊。\n\n因此，A 說謊，B 誠實，C 說謊。這與我們之前的結論一致。\n\n現在，假設 C 是誠實的。\n\n如果 C 是誠實的，那麼 C 說 \"A 和 B 都說謊\" 是真的，所以 A 和 B 都說謊。\n\n如果 A 說謊，那麼 A 說 \"B 說謊\" 是假的，所以 B 沒有說謊，但 C 說 B 說謊，矛盾，因為如果 C 誠實，B 應該說謊，但從 A 說謊我們得到 B 沒有說謊。\n\n詳細地：\n\nC 誠實 → A 和 B 都說謊。\n\nA 說謊 → A 說 \"B 說謊\" 是假的 → 所以 B 沒有說謊，B 誠實。\n\n但 C 說 B 說謊，所以如果 C 誠實，B 應該說謊，但我們有 B 誠實，矛盾。\n\n因此，C 不能是誠實的。\n\n所以，只有可能性是 A 和 C 說謊，B 誠實。\n\n因此，B 是誠實者。\n\n問題是問誰是誠實者，所以應該是 B。\n\n但讓我們確認陳述。\n\nA 說 B 說謊：但 B 誠實，所以 A 說謊，正確。\n\nB 說 C 說謊：C 說謊，所以 B 誠實，正確。\n\nC 說 A 和 B 都說謊：但 A 說謊，B 誠實，所以 \"A 和 B 都說謊\" 是假的，C 說謊，正確。\n\n完美。\n\n另一種方式：由於 C 說 A 和 B 都說謊，如果 C 誠實，則 A 和 B 都說謊，但如上，導致矛盾。\n\n如果 C 說謊，則 \"A 和 B 都說謊\" 是假的，所以至少一人誠實。\n\n現在，如果 A 誠實，則 B 說謊（因為 A 說 B 說謊），但 B 說謊則 C 誠實（因為 B 說 C 說謊是假），但 C 誠實則 A 和 B 都說謊，但 A 誠實，矛盾。\n\n所以 A 不能誠實。\n\n如果 B 誠實，則 C 說謊（B 說 C 說謊），C 說謊則 \"A 和 B 都說謊\" 假，所以既然 B 誠實，A 可能說謊。\n\nA 說 \"B 說謊\"，但 B 誠實，所以 A �",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "length",
+      "ok": true
+    },
+    {
+      "model": "z-ai/glm-4.5-air:free",
+      "probe": "P4_logic",
+      "sample": 1,
+      "temperature": 0.7,
+      "content": "\n問題：A說B說謊；B說C說謊；C說A和B都說謊。說謊者永遠說謊，誠實者永遠說真話。請問三人中誰是誠實者？\n\n首先，我需要理解題目。有三個人：A、B和C。每個人都在說另一個人的謊話情況。而且，每個人要么永遠說謊，要么永遠說真話。\n\n讓我列出所說的內容：\n\n- A說：B說謊。\n\n- B說：C說謊。\n\n- C說：A和B都說謊。\n\n現在，我需要找出誰是誠實者，誰是說謊者。\n\n由於只有三個人，我可以考慮不同的情況：假設A是誠實者，或者B是誠實者，或者C是誠實者，看看哪種情況一致。\n\n情況1：假設A是誠實者。\n\n如果A是誠實者，那麼A說的話是真話。A說B說謊，所以B確實在說謊。\n\n既然B在說謊，B說的話就是假的。B說C說謊，但這是假的，所以C其實沒有說謊，也就是C是誠實者。\n\n現在，C是誠實者，C說的話是真話。C說A和B都說謊。但我們假設A是誠實者，所以A沒有說謊，但C說A說謊，這矛盾了，因為C是誠實者，應該說真話，但A沒有說謊。\n\n所以，情況1有矛盾。A不能是誠實者。\n\n情況2：假設B是誠實者。\n\n如果B是誠實者，那麼B說的話是真話。B說C說謊，所以C確實在說謊。\n\n既然C在說謊，C說的話是假的。C說A和B都說謊。但這是假的，所以A和B不都說謊。既然B是誠實者，沒有說謊，那麼A也沒有說謊？C說的假話是\"A和B都說謊\"，所以既然這是假的，那麼不是A和B都說謊，意思是至少有一個沒有說謊。\n\n既然B是誠實者，沒有說謊，所以A也可能沒有說謊，或者A說謊但B沒有，但B沒有說謊是已知的。\n\nC說\"A和B都說謊\"，這是假的，所以實際上不是A和B都說謊，也就是說，A和B中至少有一個沒有說謊。\n\n但B是誠實者，沒有說謊，所以這是滿足的。現在，A的情況呢？\n\nA說B說謊。但B是誠實者，沒有說謊，所以A說\"B說謊\"是假的。因此，A在說謊。\n\n所以，A在說謊，B是誠實者，C在說謊。\n\n現在，檢查C的話：C說\"A和B都說謊\"。但B是誠實者，沒有說謊，所以A和B都說謊是假的，這正確，因為C在說謊。\n\nB是誠實者，說C說謊，正確。\n\nA說B說謊，但B沒有說謊，所以A在說謊，正確。\n\n現在，C在說謊，C說\"A和B都說謊\"，但B沒有說謊，所以這句話是假的，正確。\n\n所以，在這種情況下，B是誠實者，A和C都在說謊。\n\n但讓我們確認C的話。C說\"A和B都說謊\"，但B是誠實者，所以B沒有說謊，因此\"A和B都說謊\"是假的，由於C在說謊，他說假話，所以這是一致的。\n\n現在，情況3：假設C是誠實者。\n\n如果C是誠實者，那麼C說的話是真話。C說A和B都說謊，所以A和B都在說謊。\n\n既然A在說謊，A說的話是假的。A說B說謊，但A在說謊，所以這句話是假的，意思是B沒有說謊。\n\n但我們從C的話得知B在說謊，所以B沒有說謊與B在說謊矛盾。\n\n詳細：C說A和B都說謊，所以B在說謊。\n\n但A說B說謊，A在說謊，所以A的話是假的，因此B沒有說謊。\n\n但B沒有說謊與B在說謊矛盾。\n\n所以，情況3有矛盾。\n\n因此，只有情況2是可能的：B是誠實者，A和C都在說謊。\n\n在情況2，我們有B誠實，A說謊，C說謊。\n\nA說B說謊：但B沒有說謊，所以A說謊，正確。\n\nB說C說謊：C確實說謊，所以B說真話。\n\nC說A和B都說謊：但B沒有說謊，所以這句話是假的，C說謊，正確。\n\n完美。\n\n現在，問題是問誰是誠實者，所以B是誠實者。\n\n但讓我們看看是否有其他可能性。\n\n假設A說謊，B說謊，C說謊。但C說\"A和B都說謊\"，如果A和B都說謊，那麼C說真話，但我們假設C說謊，矛盾。所以不能全部說謊。\n\n如果A誠實，我們試過了，矛盾。\n\nB誠實，工作。\n\nC誠實，矛盾。\n\n所以只有B誠實是可行的。\n\n另一種方式是使用邏輯。\n\n讓A_t表示A說真話，F_t表示A說謊，同樣B_t, B_f, C_t, C_f。\n\n但說謊者永遠說謊，所以每個人要么_t要么_f。\n\nA的話：如果A_t，則B_f；如果A_f，則B_t？等一下。\n\nA說\"B說謊\"，所以如果A_t，則B_f；如果A_f，則B_t（因為A說謊，所以B沒有說謊）。\n\n同樣，B說\"C說謊\"，所以如果B_t，則C_f；如果B_f，則C_t。\n\nC說\"A和B都說謊\"，所以如果C_t，則A_f and B_f；如果C_f，則 not (A_f and B_f)，也就是 A_t or B_t。\n\n現在，我們有三個變量，但每個人只有兩種狀態。\n\n我們可以寫出方程。\n\n設P: A_t, Q: B_t, R: C_t。但說謊者就是_t的否定。\n\n或許用布林變數。\n\n定義：\n\n讓A_t為真表示A說真話，假表示A說謊。\n\n同樣B_t, C_t。\n\n現在，陳述：\n\nA說B說謊，所以A的陳述為真當且僅當B_f，也就是 B_t 為假。\n\n所以，A_t ⇔ ¬B_t\n\n因為如果A_t，則B_f（¬B_t）；如果A_f，則B_t（¬A_t ⇒ B_t，但A_f是¬A_t，所以¬A_t ⇒ B_t，這等價於 A_t ∨ B_t？等等，不對。\n\n邏輯：A的陳述是\"B說謊\"，即¬B_t。\n\n如果A說真話，則¬B_t為真，所以B_t為假。\n\n如果A說謊，則¬B_t為假，所以B_t為真。\n\n所以，A_t ⇔ ¬B_t\n\n同樣，B說\"C說謊\"，即¬C_t。\n\n所以，B_t ⇔ ¬C_t\n\nC說\"A和B都說謊\"，即¬A_t and ¬B_t。\n\n所以，C_t ⇔ (¬A_t and ¬B_t)\n\n現在，我們有三個等價式：\n\n1. A_t ⇔ ¬B_t\n\n2. B_t ⇔ ¬C_t\n\n3. C_t ⇔ (¬A_t and ¬B_t)\n\n現在，我們需要求解A_t, B_t, C_t的布林值。\n\n從1：A_t ⇔ ¬B_t，這意味著A_t和B_t不能同為真，也不能同為假；一個真一個假。\n\nA_t ⇔ ¬B_t 意味著如果",
+      "model_id": "z-ai/glm-4.5-air:free",
+      "finish_reason": "length",
+      "ok": true
+    }
+  ]
+}
