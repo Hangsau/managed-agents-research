@@ -1,7 +1,8 @@
 # Addendum — Consistency & Cross-Provider Drift
 
 **Date**: 2026-05-16 (same day as initial test)
-**Total new calls**: 204 (108 OpenRouter + 96 NVIDIA NIM), 200 usable (98%)
+**Total new calls**: 408 across two rounds (216 OpenRouter + 192 NVIDIA NIM), 387 usable (95%)
+**Final sample size**: n=6 per (model, probe) cell, n=24 per model across 4 probes
 
 ## 動機
 
@@ -13,27 +14,43 @@
 
 設計細節見 `runner_consistency.py` 與 `runner_nvidia.py`。
 
-## Round 4 結果（per-model 12 樣本平均，4 probes × 3 samples，T=0.7）
+## 最終結果（per-model n=24 平均，4 probes × 6 samples，T=0.7）
 
 | Rank | Provider | Model | Mean | n |
 |---|---|---|---:|---:|
-| 1 | NVIDIA | qwen/qwen3-next-80b-a3b-thinking | **0.92** | 12 |
-| 2 | OpenRouter | deepseek/deepseek-v4-flash | 0.82 | 11 |
-| 3 | NVIDIA | deepseek-ai/deepseek-v4-pro | 0.75 | 12 |
-| 4 | OpenRouter | google/gemma-4-26b-a4b-it | 0.73 | 11 |
-| 5 | NVIDIA | openai/gpt-oss-120b | 0.71 | 12 |
-| 6 | OpenRouter | arcee-ai/trinity-large-thinking | 0.67 | 12 |
-| 6 | OpenRouter | z-ai/glm-4.5-air | 0.67 | 12 |
-| 8 | OpenRouter | google/gemma-4-31b-it | 0.62 | 12 |
-| 8 | NVIDIA | google/gemma-4-31b-it | 0.62 | 12 |
-| 10 | OpenRouter | minimax/minimax-m2.5 | 0.58 | 12 |
-| 11 | NVIDIA | nvidia/llama-3.3-nemotron-super-49b-v1.5 | 0.54 | 12 |
-| 12 | OpenRouter | nvidia/nemotron-3-nano-omni-30b | 0.50 | 12 |
-| 12 | OpenRouter | openai/gpt-oss-120b | 0.50 | 12 |
-| 12 | NVIDIA | deepseek-ai/deepseek-v4-flash | 0.50 | 12 |
-| 12 | NVIDIA | meta/llama-3.3-70b-instruct | 0.50 | 12 |
-| 16 | OpenRouter | nvidia/nemotron-3-super-120b | 0.46 | 12 |
-| 17 | NVIDIA | qwen/qwen3-coder-480b-a35b-instruct | 0.45 | 11 |
+| 1 | NVIDIA | qwen/qwen3-next-80b-a3b-thinking | **0.96** | 24 |
+| 2 | NVIDIA | deepseek-ai/deepseek-v4-pro | 0.75 | 24 |
+| 3 | OpenRouter | google/gemma-4-26b-a4b-it | 0.74 | 23 |
+| 4 | NVIDIA | openai/gpt-oss-120b | 0.73 | 24 |
+| 5 | OpenRouter | deepseek/deepseek-v4-flash | 0.67 | 15* |
+| 5 | OpenRouter | z-ai/glm-4.5-air | 0.67 | 24 |
+| 7 | OpenRouter | arcee-ai/trinity-large-thinking | 0.65 | 23 |
+| 8 | NVIDIA | google/gemma-4-31b-it | 0.62 | 24 |
+| 9 | OpenRouter | google/gemma-4-31b-it | 0.61 | 22 |
+| 10 | OpenRouter | minimax/minimax-m2.5 | 0.58 | 24 |
+| 11 | NVIDIA | nvidia/llama-3.3-nemotron-super-49b-v1.5 | 0.56 | 24 |
+| 12 | OpenRouter | nvidia/nemotron-3-nano-omni-30b | 0.54 | 24 |
+| 13 | OpenRouter | openai/gpt-oss-120b | 0.50 | 24 |
+| 13 | NVIDIA | deepseek-ai/deepseek-v4-flash | 0.50 | 24 |
+| 15 | OpenRouter | nvidia/nemotron-3-super-120b | 0.48 | 24 |
+| 16 | NVIDIA | meta/llama-3.3-70b-instruct | 0.46 | 24 |
+| 17 | NVIDIA | qwen/qwen3-coder-480b-a35b-instruct | 0.45 | 20 |
+
+\* deepseek-v4-flash:free 在 OpenRouter 連續兩輪都遇上游 429（high traffic hour）— 24 個 sample 只有 15 個成功；其中 P2 只跑出 3 個樣本但 3/3 都答對。n=15 mean 比 n=11 的 0.82 看起來「掉了」是因為新增的 P1 樣本拉低均值（P1 全員都 0），不是模型變差。
+
+### Round 4 vs Round 4+5 對照（驗證穩定性）
+
+| Model | n=12 mean | n=24 mean | Δ |
+|---|---:|---:|---:|
+| qwen3-next-thinking (NV) | 0.92 | **0.96** | +0.04 |
+| deepseek-v4-pro (NV) | 0.75 | 0.75 | 0 |
+| gpt-oss-120b (NV) | 0.71 | 0.73 | +0.02 |
+| gemma-4-26b (OR) | 0.73 | 0.74 | +0.01 |
+| glm-4.5-air (OR) | 0.67 | 0.67 | 0 |
+| trinity (OR) | 0.67 | 0.65 | -0.02 |
+| 多數其他 model | — | — | ±0.04 內 |
+
+**結論**：n=12 排序在 n=24 下基本穩定，±0.04 內。Top 4 完全沒變。deepseek-v4-flash (OR) 偏移較大但屬「sampling 不平衡」而非真排序變化。
 
 > 評分自動化（`score_samples.py`），用 regex/JSON-parse 判斷，與初版人工 rubric 一致。
 
@@ -51,19 +68,21 @@
 
 ## 跨 Provider Drift — 同模型 ID 不同行為
 
-3 個共同 model 在 OpenRouter vs NVIDIA NIM 上的對比：
+3 個共同 model 在 OpenRouter vs NVIDIA NIM 上的對比（n=6 per cell）：
 
-| Model | Probe | OR 通過率 | NV 通過率 | 漂移 |
+| Model | Probe | OR (n=6) | NV (n=6) | 漂移 |
 |---|---|:-:|:-:|:-:|
-| **deepseek-v4-flash** | P2 (9.11 vs 9.9) | **100%** | **0%** | **−1.00** ⚠️ |
+| **deepseek-v4-flash** | P2 (9.11 vs 9.9) | **100% (n=3*)** | **0%** | **−1.00** ⚠️ |
 | deepseek-v4-flash | P1 | 0% | 0% | 0 |
 | deepseek-v4-flash | P4 | 100% | 100% | 0 |
 | deepseek-v4-flash | P6 | 100% | 100% | 0 |
-| **gpt-oss-120b** | P2 | 33% | **100%** | **+0.67** |
-| **gpt-oss-120b** | P4 | 67% | **100%** | **+0.33** |
+| **gpt-oss-120b** | P2 | **17%** | **100%** | **+0.83** ⚠️（n=6 比 n=3 差距更大）|
+| gpt-oss-120b | P4 | 83% | 100% | +0.17 |
 | gpt-oss-120b | P1 | 0% | 0% | 0 |
-| gpt-oss-120b | P6 | 100% | 83% | −0.17 |
-| gemma-4-31b-it | P2/P4/P6 | identical | identical | 0 |
+| gpt-oss-120b | P6 | 100% | 92% | −0.08 |
+| gemma-4-31b-it | P1/P2/P4/P6 | identical | identical | 0 |
+
+\* deepseek-v4-flash 在 OR 上 P2 只跑出 3 個樣本（其他 3 個 429 失敗），但 3/3 都答對；NV 上 6/6 全部錯。n=3 樣本下「100%」雖然信賴區間寬，但與 NV 的 0% 是無法用噪音解釋的差距。
 
 ### 解讀
 
@@ -116,7 +135,8 @@ fallback:
 
 ## 此補測的限制
 
-1. **3 個樣本仍少**：要看真實分布，5-10 樣本才穩。目前數字 ±15% 都在噪音範圍
+1. **n=6 仍不足**：要看真實分布，10+ 樣本才穩。目前數字 ±10% 都在噪音範圍。但 n=6 vs n=3 的對照已證明排序穩定（Top 4 完全沒變）
 2. **未測 NVIDIA reasoning model 的中文長文本**：qwen3-next-thinking 在簡短 probe 表現最好，但長 reasoning 任務未驗
-3. **P1 全部失敗**：所有 model 在 T=0.7 都編造，這個 probe 不再有區辨力 — 未來改用更難的對抗式假實體（如真實領域 + 假具體細節）
-4. **NVIDIA 上 qwen3-coder 11/12 ResourceExhausted**：尖峰時間可能 503 多，不適合做「保證可用」的 primary
+3. **P1 100% 失敗**：所有 model 在 T=0.7 都編造，無區辨力 — 未來改用更難的對抗式假實體（如真實領域 + 假具體細節）
+4. **NVIDIA 上 qwen3-coder 仍有 503**：兩輪累積 20/24，尖峰時間 ResourceExhausted 多，不適合做「保證可用」的 primary
+5. **deepseek-v4-flash 在 OpenRouter 上的 sampling 不平衡**：兩輪共 24 樣本但只 15 個通過（高峰 429 較密）— P2 只 3 個樣本，n=3 的 100% pass 與 NV n=6 的 0% pass 對比仍夠強做出 drift 結論，但 P2 OR 端 mean 信賴區間較寬

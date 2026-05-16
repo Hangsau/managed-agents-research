@@ -1,0 +1,8 @@
+openrouter failures: 19
+nvidia failures: 4
+total retry tasks: 23
+  [op] gemma-4-26b-a4b-it:free               P6_instruction s5 ok=True
+  [op] gemma-4-26b-a4b-it:free               P6_instruction s2 ok=True
+  [op] gemma-4-31b-it:free                   P6_instruction s5 ok=True
+  [op] gemma-4-31b-it:free                   P6_instruction s4 ok=False
+  [op] gemma-4-31b-it:free                   P2_number_trap s4 ok=True
