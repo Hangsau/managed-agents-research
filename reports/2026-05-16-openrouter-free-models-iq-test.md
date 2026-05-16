@@ -1,7 +1,7 @@
 # OpenRouter Free Models 智力測驗 — 2026-05-16
 
 > 報告位置：完整方法論、原始資料、評分依據見 `research/2026-05-16-openrouter-iq-test/`
-> 迭代版本：v2（含 n=9 一致性測試，T=0.7）
+> 迭代版本：v3（含 temperature ablation：T=0/0.3/0.5，n=6，top-4 模型 × P1+P4）
 
 ---
 
@@ -139,17 +139,62 @@ fallback_chain:
 
 ---
 
+---
+
+## Temperature Ablation（v3 新增）
+
+**問題**：P1 幻覺在 T=0.7 全軍覆沒是溫度效應還是固有能力上限？
+
+**方法**：top-4 OR 模型 × P1+P4 × T=0/0.3/0.5 × n=6 sample
+
+### P1 幻覺：跨溫度仍全滅
+
+| Model | T=0 | T=0.3 | T=0.5 | T=0.7 |
+|---|---|---|---|---|
+| gemma-4-26b | 0.00 | 0.00 | 0.00* | 0.00 |
+| deepseek-flash | 0.00 | 0.00 | 0.17† | 0.00 |
+| trinity-thinking | **0.00** | 0.17† | 0.00 | 0.00 |
+| glm-4.5-air | 0.00 | 0.00 | 0.00 | 0.00 |
+
+*n=1（API 失敗率高）　†n=6，1/6 樣本答對，視為雜訊非能力
+
+**結論**：P1 = 0 與溫度無關。初版 trinity 的 P1=1（n=1 T=0）是 deterministic 分支巧合，不是能力。降低溫度無法修復幻覺問題。
+
+### P4 邏輯：Gemma-26b 全溫度完美
+
+| Model | T=0 | T=0.3 | T=0.5 | T=0.7 |
+|---|---|---|---|---|
+| gemma-4-26b | **1.00** | **1.00** | **1.00** | **1.00** |
+| deepseek-flash | 0.83 | 0.67 | 0.83 | 0.88 |
+| trinity-thinking | 0.67 | 0.67 | **1.00** | 0.67 |
+| glm-4.5-air | 0.33 | 0.50 | 0.83 | 0.67 |
+
+glm-4.5-air 的 P4 隨溫度上升而改善（T=0: 0.33 → T=0.5: 0.83）——低溫反而讓它更確定地走錯分支；trinity T=0.5 邏輯最強（1.00）。
+
+### 對 Hestia 的實用結論
+
+**不要降低溫度來修幻覺**：T=0 不解決 P1，反而可能傷害部分模型的推理能力（glm-4.5-air P4 在 T=0 只有 0.33）。生產設定建議 T=0.3～0.5，在合理多樣性與推理穩定性之間取平衡。
+
+---
+
 ## 可重現
 
 ```bash
 cd research/2026-05-16-openrouter-iq-test/
 export OPENROUTER_API_KEY=sk-or-...
 
-# 補缺漏並擴展到 n=9
+# v2：補缺漏到 n=9
 python runner_round6.py
+
+# v3：temperature ablation
+python runner_temp_ablation.py
+python score_temp_ablation.py
 
 # 重新評分 + 跨 provider 分析
 python score_samples.py
+
+# 同步 SQLite DB
+python db_ingest.py
 ```
 
-完整評分理由、各模型逐題回應、原始 JSON 見 [`research/2026-05-16-openrouter-iq-test/`](../research/2026-05-16-openrouter-iq-test/)。
+完整評分理由、各模型逐題回應、原始 JSON 與 SQLite DB 見 [`research/2026-05-16-openrouter-iq-test/`](../research/2026-05-16-openrouter-iq-test/)。
