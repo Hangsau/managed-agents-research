@@ -72,52 +72,155 @@ swimming/technique/
 
 **目標：** 將 1151 行流水帳重構為條目化、交叉參照、可檢索的結構。
 
-**步驟：**
+---
 
-1. **分析現有內容結構**
-   - 讀完 `四式技術動作.md` 全文（1151 行）
-   - 識別所有 `##` / `###` 標題，建立 outline
-   - 識別每個技術論點的邊界（哪段講什麼）
+**Step 1：產出「現狀 outline」文件**
 
-2. **重新組織為雙層結構**
-   - **Layer 1（概覽）：** 每個泳式一頁 `動作分解-{泳式}.md`，包含：動作階段分解、關鍵技術點、錯誤模式
-   - **Layer 2（細節）：** `四式技術動作.md` 變成維基式條目索引，each `##` 是一個可獨立引用的技術條目
+- 讀完 `四式技術動作.md` 全文（1151 行）
+- 產出 `swimming/technique/_outline-current.md`（臨時檔案，完成後刪除），格式：
 
-3. **加上 block IDs 和交叉參照**
-   - 每個技術條目加上 `^block-id`（Obsidian wikilink 錨點）
-   - 技術條目之間用 `[[wikilink]]` 交叉參照
-   - 例如：「高肘捕水」條目 reference `[[四式技術動作#^evf-physics]]`
+```markdown
+## 自由式區塊
+### 1.1 物理框架：沒有唯一最優技術
+  - 起點：line 14
+  - 終點：line 20（下一個 ### 之前）
+  - 核心論點：推進結構 + 速度公式 SR×SL
+  - 狀態：✅ 完整
+  
+### 1.2 三種技術風格：距離與生理條件的投影
+  - 起點：line 24
+  - 終點：line 48
+  - 核心論點：Hip-driven / Shoulder-driven / Hybrid 三風格對比表
+  - 狀態：✅ 完整
 
-4. **驗證**
-   - 確認每個 query 場景（「划手掉力」「換氣時機」「滾轉不足」）都能在 3 次點擊內找到答案
-   - 確認 skill 可以用標題+block ID 而非線性掃描召回內容
+...（以此類推，覆蓋全部 ## 和 ### 標題）
+```
+
+- 這個檔案是過渡品，用完即刪。它的目的是讓重構時有「對照原點」。
+
+---
+
+**Step 2：產出「重構 mapping 表」**
+
+根據 Step 1 的 outline，產出 `swimming/technique/_重构-mapping.md`（臨時檔案）：
+
+```markdown
+## 自由式 → 動作分解-自由式.md
+| 原標題 | 內容摘要 | 去哪裡 |
+|--------|----------|--------|
+| 1.1 物理框架 | 推進結構 + SR×SL 公式 | 動作分解-自由式.md §1 |
+| 1.2 三種技術風格 | Hip/Shoulder/Hybrid | 動作分解-自由式.md §2 |
+| 1.3 六階段划手 | 六階段分析表 | 動作分解-自由式.md §3（保留在四式技術動作.md 作為條目引用） |
+
+## 蝶式 → 動作分解-蝶式.md
+...
+
+## 四式技術動作.md 重構原則
+- 原本的「泳式內流水帳」→ 拆出去，成為獨立的 動作分解-{泳式}.md
+- 四式技術動作.md 的內容 → 改為「技術條目索引」，each ## = 一個可獨立引用的 block
+- 每個 block 加 `^block-id`，格式：`^freestyle-physics`、`^freestyle-stroke-cycle`
+```
+
+---
+
+**Step 3：執行重構（按 mapping 表）**
+
+- 新增 `動作分解-自由式.md`（從四式技術動作.md 抽出自由式相關內容）
+- 新增 `動作分解-蝶式.md`（從四式技術動作.md 抽出蝶式相關內容）
+- 新增 `動作分解-仰式.md`（新建，標注 P1 文獻需求：仰泳動作分解待補）
+- 新增 `動作分解-蛙式.md`（新建，標注 P1 文獻需求：蛙泳動作分解待補）
+- 重構 `四式技術動作.md`：移除已抽出內容，替換為 wikilink 指向對應的 動作分解-{泳式}.md
+
+---
+
+**Step 4：加 block IDs + 交叉參照**
+
+- 每個技術條目加上 `^block-id`（格式：`^{泳式}-{概念}`，例如 `^freestyle-evf`）
+- 技術條目之間用 `[[wikilink]]` 交叉參照
+- 例：`高肘捕水` 條目 → `參見：[[動作分解-自由式#^freestyle-evf]]`
+
+---
+
+**Step 5：Wikilink audit（收尾）**
+
+- 搜尋所有 `[[...]]`，確認無 dangling reference
+- 確認每個 `[[...]]` 都指向實際存在的檔案或 block
+
+---
+
+**Step 6：95% 覆蓋率驗證**
+
+- 對照 Step 1 產出的 outline，確認每個原始 ## 的內容都有出現在新結構中
+- 允許 5% 誤差（某些過渡性段落自然消失是可以的）
+- 若低於 95%，回頭補上
+
+---
 
 **檔案變更：**
-- `swimming/technique/四式技術動作.md` — 重構（保留核心內容，重新組織結構）
-- `swimming/technique/動作分解-自由式.md` — 新增（從四式技術動作.md 抽出自由式部分）
-- `swimming/technique/動作分解-蝶式.md` — 新增（從四式技術動作.md 抽出蝶式部分）
-- `swimming/technique/動作分解-仰式.md` — 新增（新建）
-- `swimming/technique/動作分解-蛙式.md` — 新增（新建）
+- `swimming/technique/_outline-current.md` — 新增（臨時，Step 6 後刪除）
+- `swimming/technique/_重构-mapping.md` — 新增（臨時，Step 6 後刪除）
+- `swimming/technique/四式技術動作.md` — 重構（內容替換為條目索引）
+- `swimming/technique/動作分解-自由式.md` — 新增
+- `swimming/technique/動作分解-蝶式.md` — 新增
+- `swimming/technique/動作分解-仰式.md` — 新增（標注 P1 缺口）
+- `swimming/technique/動作分解-蛙式.md` — 新增（標注 P1 缺口）
 
 ### Phase 2：建立索引層
 
 **目標：** 建立 MOC + TAG-INDEX，讓人和 skill 都能快速定位內容。
 
-**步驟：**
+---
 
-1. **建立 `四式技術動作-索引.md`（MOC）**
-   - 包含所有 technique/ 檔案的目錄
-   - 每個檔案：標題、版本、核心主題、關鍵字清單
-   - 以泳式分類，附上快速跳轉連結
+**Step 0（先於 Step 1）：定義 TAG-INDEX.md 格式**
 
-2. **建立 `TAG-INDEX.md`**
-   - 格式：`tag: {相關檔案} | {相關 section} | {摘要}`
-   - 主要 tag：髖驅動/肩驅動、高肘、划手、踢水、換氣、滾轉、出發、轉身、水下蝶腳
-   - 每個 tag 至少 3 個相關檔案/段落
+在開始建立索引之前，先定義好 output format：
 
-3. **驗證**
-   - 確認 MOC 能在 10 秒內讓人找到任意技術主題
-   - 確認 TAG-INDEX 能讓 skill 用 keyword matching 找到相關檔案
+```markdown
+# TAG-INDEX
+
+格式：`tag_name | file | section | block_id | summary`
+
+## 命名規範
+- Tag 名称：英文 camelCase（例：`hipDrive`, `evfCatch`, `breatheTiming`）
+- 每個 tag 至少關聯 3 個檔案/段落
+- Block ID 格式：`^{泳式}-{概念}`（例：`^freestyle-evf`）
+
+## 確定性標記權重（用於 skill scoring）
+- 🟢 近期文獻（2009–2025）：權重 1.0
+- 🟡 有效舊文獻（1990–2008）：權重 0.8
+- 🟠 教練觀測：權重 0.6
+- 🔵 物理推導：權重 0.5
+- 🔴 未查證假設：權重 0.3
+
+## Entry 範例
+```
+hipDrive | 動作分解-自由式.md | §2 三種技術風格 | ^freestyle-hip-drive | Hip-driven 髖部驅動：低划頻（50–75次/分），髖旋轉幅度 45–60°，適合長距離
+
+evfCatch | 四式技術動作.md | §1.3 六階段划手 | ^freestyle-evf | 高肘捕水（EVF）：手掌是主推進面，上臂保持與游進方向平行以最小化阻力
+
+breatheTiming | 教學誤區-自由式.md | §換氣時機 | ^freestyle-breathe-timing | 換氣時頭部不應抬起，應靠眼球角度解決，頭部本身不移動
+```
+
+---
+
+**Step 1：建立 `四式技術動作-索引.md`（MOC）**
+**Step 1：建立 `四式技術動作-索引.md`（MOC）**
+
+- 包含所有 technique/ 檔案的目錄
+- 每個檔案：標題、版本、核心主題、關鍵字清單
+- 以泳式分類，附上快速跳轉連結
+
+**Step 2：建立 `TAG-INDEX.md`**
+
+- 按照 Step 0 定義的格式建立
+- 主要 tag 清單：髖驅動/肩驅動、高肘、划手、踢水、換氣、滾轉、出發、轉身、水下蝶腳、推進力、速度公式
+- 每個 tag 至少 3 個相關檔案/段落
+- 由 Phase 1 的 block ID 匯入（Phase 1 完成後才有 stable block IDs）
+
+**Step 3：驗證**
+
+- 確認 MOC 能在 10 秒內讓人找到任意技術主題
+- 確認 TAG-INDEX 能讓 skill 用 keyword matching 找到相關檔案（不需 semantic search）
 
 **檔案變更：**
 - `swimming/technique/四式技術動作-索引.md` — 新增
@@ -127,33 +230,132 @@ swimming/technique/
 
 **目標：** 建立可被外部 API 調用的 retrieval skill。
 
-**步驟：**
+---
 
-1. **規劃 skill 介面**
-   - Input: `{query: string, scope?: string[]}`
-   - Process: keyword extraction → vault search (using TAG-INDEX) → fetch relevant sections → rank by relevance
-   - Output: `[{file, section, block_id, content, relevance_score}, ...]`
+**Step 1：定義 skill 介面規格**
 
-2. **實作 retrieval 邏輯（pseudo-code）**
-   ```
-   1. Parse query → extract keywords
-   2. Search TAG-INDEX.md for matching tags
-   3. Retrieve candidate files from TAG-INDEX
-   4. For each candidate file, extract relevant sections (using block IDs)
-   5. Score by: keyword match density, 確定性標記, recency
-   6. Return top-K results (K=3 to 5)
-   ```
+```yaml
+name: swimming-vault
+description: 自然語言搜尋游泳 vault，回傳相關技術檔案與段落
 
-3. **建立技能文件**
-   - `swimming-vault/SKILL.md` — 完整的 skill specification
-   - 包含觸發條件、輸入格式、輸出格式、fallback logic
+trigger:
+  - 使用者問技術問題（「蝶式划手掉力怎麼修」）
+  - 外部 API 調用（傳入 query string）
 
-4. **驗證**
-   - 測試 5+ 個 query 場景，確認召回內容相關且準確
-   - 確認 skill output 可被下游 API 直接使用
+input:
+  type: object
+  fields:
+    query:
+      type: string
+      required: true
+      constraints:
+        - min_length: 2
+        - max_length: 500
+        - 空白或 null → return {error: "empty_query"}
+    scope:
+      type: string[]
+      required: false
+      default: 所有 technique/ 檔案
+      description: 要搜尋的檔案範圍（可指定特定泳式）
 
-**檔案變更：**
-- `~/.hermes/skills/swimming-vault/SKILL.md` — 新增
+process:
+  1. 解析 query → 提取 keywords（停用詞過濾、小寫正規化）
+  2. 搜尋 TAG-INDEX.md，找到 matching tags
+  3. 從 TAG-INDEX 取出候選檔案列表（去重）
+  4. 若有 scope filter，只保留 scope 內的檔案
+  5. 對每個候選檔案，用標題 + block ID 召回相關 section
+  6. Relevance scoring：keyword match density × 確定性標記權重 × 檔案新舊
+  7. Return top-K results（K=5，max=10）
+
+output:
+  type: object
+  fields:
+    query: 原 query（echo）
+    results: array of result objects
+    count: number of results
+    error: string | null（若無錯誤則為 null）
+
+result_object:
+  file: 檔案路徑（相對於 vault root）
+  section: 所在章節標題
+  block_id: block ID（如有）
+  content: 召回的段落內容（完整句子，最多 500 字）
+  relevance_score: float（0-1，1 為最高）
+  確定性標記: 🟢/🟡/🟠/🔵/🔴
+
+error_handling:
+  - empty_query → {error: "empty_query", results: [], count: 0}
+  - no_match → {error: null, results: [], count: 0, message: "無相關內容，請擴充關鍵字"}
+  - vault_not_found → {error: "vault_path_not_found", results: [], count: 0}
+  - read_timeout → {error: "read_timeout", results: [], count: 0}
+  - max_results_exceeded → 截斷並附加 warning
+```
+
+---
+
+**Step 2：實作 retrieval 邏輯（pseudo-code）**
+
+```
+function swimming_vault_search(query, scope=None):
+    # Input validation
+    if not query or len(query.strip()) < 2:
+        return {"error": "empty_query", "results": [], "count": 0}
+    
+    if len(query) > 500:
+        query = query[:500]  # 截斷，不報錯
+    
+    # Keyword extraction
+    keywords = extract_keywords(query)  # 移除停用詞，取詞幹
+    
+    # Search TAG-INDEX
+    tag_matches = search_tag_index(keywords)
+    if not tag_matches:
+        return {"error": null, "results": [], "count": 0, 
+                "message": "無相關內容，請擴充關鍵字"}
+    
+    # Gather candidate files
+    candidate_files = list(set([tag["file"] for tag in tag_matches]))
+    
+    # Apply scope filter if specified
+    if scope:
+        candidate_files = [f for f in candidate_files if f in scope]
+    
+    # Retrieve and score sections
+    results = []
+    for file in candidate_files:
+        sections = retrieve_sections(file, tag_matches)
+        for section in sections:
+            score = calculate_relevance(section, keywords, tag_matches)
+            results.append({**section, "relevance_score": score})
+    
+    # Sort and limit
+    results.sort(key=lambda x: x["relevance_score"], reverse=True)
+    results = results[:10]  # max 10
+    
+    return {
+        "query": query,
+        "results": results,
+        "count": len(results),
+        "error": null
+    }
+```
+
+---
+
+**Step 3：建立技能文件**
+
+- `~/.hermes/skills/swimming-vault/SKILL.md` — 完整的 skill specification
+- 包含觸發條件、輸入格式、輸出格式、fallback logic、測試案例
+
+---
+
+**Step 4：驗證**
+
+- 測試 query：「蝶式划手掉力怎麼修」→ 返回相關檔案 + 段落
+- 測試 query：「高肘怎麼做」→ 返回技術論點 + 引用來源
+- 測試 empty query → 正確 error response
+- 測試 no-match query → 正確空结果 + message
+- 確認 skill output 可被下游 API 直接使用（JSON parse）
 
 ---
 
@@ -270,8 +472,8 @@ Phase 1 → Phase 2 → Phase 3
 
 ### Revised by Plan Author
 
-- [ ] Critical Issue 1 addressed: Phase 1 將細化為「分析 output 清單 + 重構 mapping 表」
-- [ ] Critical Issue 2 addressed: Phase 3 將補足 input validation 和 error handling 規格
-- [ ] Recommendation 1: TAG-INDEX format 將在 Phase 2 開始前明確定義
-- [ ] Recommendation 2: Phase 1 將加入「95% 覆蓋率驗證」具體方法
-- [ ] Recommendation 3: Phase 1 末尾將加入「wikilink audit」步驟
+- [x] Critical Issue 1 addressed: Phase 1 細化為「Step 1 outline → Step 2 mapping → Step 3 重構 → Step 4 block ID → Step 5 audit → Step 6 驗證」，每步 output 明確定義
+- [x] Critical Issue 2 addressed: Phase 3 補足 input validation（min/max length, empty/null handling）和 error handling（5 種 error case各有對應 response）
+- [x] Recommendation 1: TAG-INDEX format 在 Phase 2 Step 0 先定義（命名規範、權重、entry 範例），再開始建
+- [x] Recommendation 2: Phase 1 Step 6 改為「95% 覆蓋率驗證」，有具體方法（對照 outline）
+- [x] Recommendation 3: Phase 1 Step 5 加入「Wikilink audit」步驟
