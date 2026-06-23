@@ -217,3 +217,16 @@ Settings Deny List  →  Git Hooks  →  Tests  →  Multi-model Review  →  Br
 11. https://github.com/study8677/Awesome-Self-Evolving-Agents — **REPO** — **LOW** — 2025-12-07 curated list，self-reflection + self-correction + evolutionary feedback loops 三軸分類（2026-01-10 最後更新）
 
 下一個工作日排程執行本指令。
+
+---
+
+## Vault Extract 執行記錄（2026-06-23 23:00 cron）
+
+執行 `python3 /home/hangsau/.hermes/scripts/extract_research_knowledge.py --report <本檔路徑>` 時失敗：
+
+```
+PermissionError: [Errno 13] Permission denied:
+'/root/obsidian-vault/research/2026-06-23-...md'
+```
+
+**根因**：腳本內部 `knowledge['vault_path']` 配成 `/root/obsidian-vault/...`，但實際 vault 位置是 `/home/hangsau/obsidian-vault/`（`hangsau` 擁有，無寫入 `/root/obsidian-vault` 權限）。此問題與本報告無關，預期會在後續 cron 嘗試中由 vault-owner 修復。依 skill 規範「錯誤訊息記錄在報告結尾但不影響整體流程」，不重試、不報錯退出。
